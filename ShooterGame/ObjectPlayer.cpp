@@ -54,7 +54,7 @@ void ObjectPlayer::Update()
 	m_rotation.y = std::clamp(m_rotation.y, -MAX_ROT, MAX_ROT);
 }
 
-void ObjectPlayer::Draw()
+void ObjectPlayer::Draw() const
 {
 	Matrix4x4f transform = MatrixTranslate<f32>(m_pos.x, m_pos.y, m_pos.z) 
 						 * MatrixRotationX<f32>(m_rotation.x) 
@@ -63,4 +63,6 @@ void ObjectPlayer::Draw()
 
 	Graphics::SetMaterial(m_materialId);
 	Graphics::DrawMesh(m_meshId, transform);
+
+	
 }

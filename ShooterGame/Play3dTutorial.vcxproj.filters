@@ -37,6 +37,7 @@
     <ClInclude Include="ObjectPlayer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -61,6 +62,9 @@
       <Filter>Flowstates</Filter>
     </ClCompile>
     <ClCompile Include="ObjectPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

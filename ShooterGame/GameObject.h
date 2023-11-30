@@ -18,7 +18,7 @@ public:
 	
 	// Providing no implementation of the virtual Update function makes this an abstract base class
 	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Draw() const = 0;
 	// These virtuals have implementations and so are optional overrides
 	virtual void OnCollision( GameObject* ) {};
 

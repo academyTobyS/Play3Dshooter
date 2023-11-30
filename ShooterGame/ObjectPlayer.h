@@ -7,6 +7,6 @@ public:
 	ObjectPlayer(Play3d::Vector3f position);
 
 	void Update() override;
-	void Draw() override;
+	void Draw() const override;
 };
 

@@ -154,6 +154,7 @@
     <ClInclude Include="FlowstateMenu.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Play3d.h" />
     <ClInclude Include="ObjectPlayer.h" />
   </ItemGroup>
@@ -166,6 +167,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

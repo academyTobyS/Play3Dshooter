@@ -1,5 +1,6 @@
 #pragma once
 #include "Flowstate.h"
+#include "ParticleEmitter.h"
 
 class FlowstateGame : public Flowstate
 {
@@ -9,4 +10,7 @@ public:
 
 	eFlowstates Update() override;
 	void Draw() override;
+
+private:
+	ParticleEmitter m_emitter;
 };
