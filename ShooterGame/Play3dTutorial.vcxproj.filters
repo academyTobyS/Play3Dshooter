@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Flowstates">
+      <UniqueIdentifier>{3b238ef7-8560-4ac7-b697-435cf7f66292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play3D">
+      <UniqueIdentifier>{40b0f76e-5b28-444c-823d-e29ecea6b6a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Flowstate.h">
+      <Filter>Flowstates</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowstateMenu.h">
+      <Filter>Flowstates</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowstateMachine.h">
+      <Filter>Flowstates</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowstateGame.h">
+      <Filter>Flowstates</Filter>
+    </ClInclude>
+    <ClInclude Include="Play3d.h">
+      <Filter>Play3D</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPlayer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowstateMenu.cpp">
+      <Filter>Flowstates</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowstateMachine.cpp">
+      <Filter>Flowstates</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowstateGame.cpp">
+      <Filter>Flowstates</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
