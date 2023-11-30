@@ -186,6 +186,7 @@ namespace Play3d
 
 namespace Play3d {
 
+	constexpr f32 kfQuartPi = 3.141592654f / 4.0f;
 	constexpr f32 kfHalfPi = 3.141592654f / 2.0f;
 	constexpr f32 kfPi = 3.141592654f;
 	constexpr f32 kfTwoPi = 6.283185307f;
@@ -3908,8 +3909,8 @@ namespace Play3d
 		{
 			SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE);
 
-			u32 width = 800;
-			u32 height = 600;
+			u32 width = 1920;
+			u32 height = 1080;
 			const wchar_t* windowName = L"Play3d";
 
 			WNDCLASSEXW wcex;

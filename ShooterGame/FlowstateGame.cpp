@@ -16,7 +16,7 @@ void FlowstateGame::EnterState()
 	Graphics::SetLightColour(2, ColourValue(0x0000FF));
 	Graphics::SetLightDirection(2, Vector3f(-1, 1, -1));
 
-	GetObjectManager()->CreateObject(GameObjectType::TYPE_PLAYER, Vector2f(20.f, 100.f));
+	GetObjectManager()->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, 0.f, 0.f));
 }
 
 
@@ -31,6 +31,7 @@ eFlowstates FlowstateGame::Update()
 
 void FlowstateGame::Draw()
 {
+	//Demo::DrawDebugGrid();
 	GetObjectManager()->DrawAll();
 
 	// Debug Text

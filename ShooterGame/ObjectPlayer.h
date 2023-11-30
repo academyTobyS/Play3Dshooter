@@ -4,7 +4,7 @@
 class ObjectPlayer : public GameObject
 {
 public:
-	ObjectPlayer(Play3d::Vector2f position);
+	ObjectPlayer(Play3d::Vector3f position);
 
 	void Update() override;
 	void Draw() override;

@@ -2,7 +2,7 @@
 
 using namespace Play3d;
 
-GameObject::GameObject( GameObjectType objType, Vector2f position)
+GameObject::GameObject( GameObjectType objType, Vector3f position)
 {
 	m_type = objType;
 	m_pos = position;
@@ -51,4 +51,36 @@ void GameObject::UpdateAnimation()
 		m_frame++;
 		m_frameTimer = 0;
 	}
+}
+
+Graphics::MeshId GameObject::AssignMesh(Graphics::MeshId& rId, const char* filepath)
+{
+	if (rId.IsInvalid())
+	{
+		rId = Graphics::CreateMeshFromObjFile(filepath, Colour::White, 0.25f);
+	}
+	return rId;
+}
+
+Graphics::MaterialId GameObject::AssignMaterial(Graphics::MaterialId& rId, const char* filepath)
+{
+	if (rId.IsInvalid())
+	{
+		Graphics::SimpleMaterialDesc desc;
+		desc.m_state.m_cullMode = Graphics::CullMode::BACK;
+		desc.m_state.m_fillMode = Graphics::FillMode::SOLID;
+		Colour::White.as_float_rgba_srgb(&desc.m_constants.diffuseColour.x);
+		desc.m_bEnableLighting = true;
+		desc.m_lightCount = 3;
+
+		// We can optionally use textures.
+		if(filepath != "")
+		{
+			desc.m_texture[0] = Graphics::CreateTextureFromFile(filepath);
+			desc.m_sampler[0] = Graphics::CreateLinearSampler();
+		}
+
+		rId = Resources::CreateAsset<Graphics::Material>(desc);
+	}
+	return rId;
 }

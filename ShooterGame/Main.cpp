@@ -195,36 +195,4 @@ void UnusedCode()
 
 	//// Finish the batch to pass these calls to the GPU.
 	//Graphics::EndPrimitiveBatch();
-
-	//// We can collect related primitives into further batches.
-	//Demo::DrawDebugGrid();
-
-	//// The 'Mesh Drawing Interface' allows us to draw instances of the mesh shapes created earlier.
-
-	//// Each mesh instance is given a World transform matrix.
-	//Matrix4x4f transform = MatrixTranslate<f32>(0.f, 1.f, 0.f) * MatrixRotationY<f32>(fTime * kfTwoPi); // *MatrixScale<f32>(0.5f, 0.75f, 0.24f);
-
-	//// We can set a material then draw several meshes.
-	//Graphics::SetMaterial(wireframeMaterial);
-	//Graphics::DrawMesh(cubeId, transform);
-
-	//// Platonic Solids
-	//Matrix4x4f matScale = MatrixRotationY<f32>(fTime * 0.1f) * MatrixScale<f32>(0.25, 0.25, 0.25);
-	//Graphics::SetMaterial(solidMaterial);
-	//Graphics::DrawMesh(cubeId, transform);
-	//Graphics::DrawMesh(tetraHedronId, MatrixTranslate<f32>(-1.f, 0.5f, 0.f) * matScale);
-	////Graphics::SetMaterial(wireframeMaterial);
-	//Graphics::DrawMesh(octaHedronId, MatrixTranslate<f32>(0.5f, 0.5f, 0.f) * matScale);
-	//Graphics::DrawMesh(cylinderId, MatrixTranslate<f32>(0.75f, 0.5f, 0.f) * matScale);
-	//Graphics::DrawMesh(sphereId, MatrixTranslate<f32>(0.75f, 0.5f, 1.f));
-
-	//Graphics::DrawMesh(objMeshId, transform);
-
-	//Graphics::SetMaterial(complexMaterialId);
-	//Graphics::DrawMesh(boxId, MatrixTranslate<f32>(0.f, 0.1f, -2.f));
-
-	//// Switch to the textured material
-	//Graphics::SetMaterial(solidTexturedMaterial);
-	//Graphics::DrawMesh(planeId, MatrixTranslate<f32>(0.f, -0.001f, 0.0f));
-	//Graphics::DrawMesh(hexaHedronId, MatrixTranslate<f32>(-0.5f, 0.5f, 0.f) * matScale);
 }

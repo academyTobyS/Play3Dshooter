@@ -9,7 +9,7 @@ public:
 	GameObjectManager() = default;
 	~GameObjectManager();
 
-	GameObject* CreateObject( GameObjectType objType, Play3d::Vector2f pos);
+	GameObject* CreateObject( GameObjectType objType, Play3d::Vector3f pos);
 	void RegisterGameObject( GameObject* obj ) { m_pGameObjectList.push_back( obj ); };
 
 	void UpdateAll();

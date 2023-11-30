@@ -45,7 +45,7 @@ GameObjectManager::~GameObjectManager()
 // This is a factory pattern which decouples the creation of specific object types from their class implementations
 // This means you can create any type of GameObject from external code via the GameObjectManager without needing 
 // to reference the class itself. In practice this means a lot fewer #includes are necessary
-GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vector2f pos)
+GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vector3f pos)
 {
 	GameObject* pNewObj = nullptr;
 
@@ -75,6 +75,7 @@ void GameObjectManager::UpdateAll()
 	for( int i = 0; i < m_pGameObjectList.size(); i++ ) 
 	{
 		m_pGameObjectList[ i ]->Update();
+		m_pGameObjectList[ i ]->StandardMovementUpdate();
 	}
 	CollideAll();
 	CleanUpAll();
