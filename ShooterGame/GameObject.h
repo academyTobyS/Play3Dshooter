@@ -5,7 +5,8 @@
 enum GameObjectType
 {
 	TYPE_NULL = -1,
-	TYPE_PLAYER
+	TYPE_PLAYER,
+	TYPE_PLAYER_PELLET,
 };
 
 class GameObject
@@ -18,7 +19,7 @@ public:
 	
 	// Providing no implementation of the virtual Update function makes this an abstract base class
 	virtual void Update() = 0;
-	virtual void Draw() const = 0;
+	virtual void Draw() const;
 	// These virtuals have implementations and so are optional overrides
 	virtual void OnCollision( GameObject* ) {};
 

@@ -12,5 +12,8 @@ public:
 	void Draw() override;
 
 private:
+	void SetGameCamera();
+
 	ParticleEmitter m_emitter;
+	bool m_debugCam{ false };
 };

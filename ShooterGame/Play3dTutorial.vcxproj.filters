@@ -11,14 +11,11 @@
     <Filter Include="Play3D">
       <UniqueIdentifier>{40b0f76e-5b28-444c-823d-e29ecea6b6a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{4fa67058-f263-434c-aec1-247496934d81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Flowstate.h">
       <Filter>Flowstates</Filter>
     </ClInclude>
@@ -34,22 +31,25 @@
     <ClInclude Include="Play3d.h">
       <Filter>Play3D</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectPlayer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="ObjectPlayer.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPellet.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MainGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FlowstateMenu.cpp">
@@ -61,11 +61,20 @@
     <ClCompile Include="FlowstateGame.cpp">
       <Filter>Flowstates</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleEmitter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPlayer.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPellet.cpp">
+      <Filter>GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

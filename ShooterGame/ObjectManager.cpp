@@ -3,6 +3,7 @@
 
 // Needs to know about all the object types so it can create them
 #include "ObjectPlayer.h"
+#include "ObjectPellet.h"
 
 // **************************************************************************************************
 // These functions provide global access to the GameObjectManager class throughout the codebase
@@ -51,21 +52,19 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 
 	switch( objType )
 	{
-	case TYPE_NULL:
-		break;
-
 	case TYPE_PLAYER:
-		//pNewObj = new Agent8( TYPE_PLAYER, pos, vel, "agent8" );
 		pNewObj = new ObjectPlayer(pos);
 		break;
 
-	default:
+	case TYPE_PLAYER_PELLET:
+		pNewObj = new ObjectPellet(pos);
 		break;
 	}
 
 	if( pNewObj != nullptr )
 		GetObjectManager()->RegisterGameObject( pNewObj );
 
+	PLAY_ASSERT(pNewObj);
 	return pNewObj;
 }
 

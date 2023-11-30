@@ -45,4 +45,8 @@ private:
 	std::vector<Particle> m_particles;
 	ParticleEmitterSettings m_settings;
 	float m_timerEmit{0.f};
+
+	#ifdef _DEBUG
+	size_t m_debugMaxParticleCount{0};
+	#endif
 };

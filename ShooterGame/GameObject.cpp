@@ -29,6 +29,18 @@ bool GameObject::IsColliding( GameObject* obj )
 	return((xDiff * xDiff) + (yDiff * yDiff) < radii * radii);
 }
 
+void GameObject::Draw() const
+{
+	Matrix4x4f transform = 
+		  MatrixTranslate<f32>(m_pos.x, m_pos.y, m_pos.z)
+		* MatrixRotationX<f32>(m_rotation.x)
+		* MatrixRotationY<f32>(m_rotation.y)
+		* MatrixRotationZ<f32>(m_rotation.z);
+
+	Graphics::SetMaterial(m_materialId);
+	Graphics::DrawMesh(m_meshId, transform);
+}
+
 void GameObject::StandardMovementUpdate()
 {
 	m_rotation += m_rotSpeed;

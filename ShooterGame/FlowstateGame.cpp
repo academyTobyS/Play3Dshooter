@@ -18,34 +18,67 @@ void FlowstateGame::EnterState()
 
 	// Setup player
 	GameObjectManager* pObjs{ GetObjectManager() };
-	GameObject* pPlayer = pObjs->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, 0.f, 0.f));
+	GameObject* pPlayer = pObjs->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, -1.f, 0.f));
 	pObjs->SetPlayer(pPlayer);
 
 	// Setup stars
 	ParticleEmitterSettings s;
-	s.capacity = 500;
-	s.emitterMinExtents = Vector3f(-6.f, 0.f, -0.6f);
-	s.emitterMaxExtents = Vector3f(6.f, 0.f, 0.6f);
-	s.particleMinVelocity.y = -0.9f;
-	s.particleMaxVelocity.y = -0.4f;
+	s.capacity = 300;
+	s.emitterMinExtents = Vector3f(-10.f, 0.f, -0.6f);
+	s.emitterMaxExtents = Vector3f(10.f, 0.f, 0.6f);
+	s.particleMinVelocity.y = -5.f;
+	s.particleMaxVelocity.y = -3.f;
+	s.emitWaitMin = 0.01f;
+	s.emitWaitMax = 0.1f;
 	s.particlesRelativeToEmitter = true;
-	s.particleLifetime = 20.f;
+	s.particleLifetime = 4.f;
+	s.particlesPerEmit = 4;
 	m_emitter.ApplySettings(s);
-	m_emitter.m_position.y = 5.f;
+	m_emitter.m_position.y = 10.f;
 	m_emitter.Prewarm();
+
+	SetGameCamera();
 }
 
+void FlowstateGame::SetGameCamera()
+{
+	Graphics::SurfaceSize surfaceSize = Graphics::GetDisplaySurfaceSize();
+	f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(15.f);
+
+	Vector3f camEye{0.f, 2.5f, -10.f};
+	Vector3f forward{0.f, 0.f, 1.f};
+	Vector3f up{0.f, 1.f, 0.f};
+
+	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
+	Matrix4x4f project = MatrixPerspectiveProjectRH(fovY, aspect, nearZ, farZ);
+
+	Graphics::SetViewport(Graphics::Viewport(surfaceSize)); // prob scissor too.
+	Graphics::SetViewMatrix(view);
+	Graphics::SetProjectionMatrix(project);
+}
 
 eFlowstates FlowstateGame::Update()
 {
-	GameObjectManager* pObjs{ GetObjectManager() };
+	if (Input::IsKeyPressed(VK_F1))
+	{
+		m_debugCam = !m_debugCam;
+		if (!m_debugCam)
+		{
+			SetGameCamera();
+		}
+	}
 
-	Demo::UpdateDebugCamera();
-	Demo::SetDebugCameraMatrices();
+	GameObjectManager* pObjs{ GetObjectManager() };
+	if(m_debugCam)
+	{
+		Demo::UpdateDebugCamera();
+		Demo::SetDebugCameraMatrices();
+	}
+
 	pObjs->UpdateAll();
 	m_emitter.Tick();
 
-	m_emitter.m_position.x = (-pObjs->GetPlayer()->GetPosition().x) * 0.25f;
+	m_emitter.m_position.x = (-pObjs->GetPlayer()->GetPosition().x) * 0.2f;
 
 	return eFlowstates::STATE_NULL;
 }
@@ -53,6 +86,11 @@ eFlowstates FlowstateGame::Update()
 
 void FlowstateGame::Draw()
 {
+	if (m_debugCam)
+	{
+		Demo::DrawDebugGrid();
+	}
+
 	Graphics::BeginPrimitiveBatch();
 
 	//Demo::DrawDebugGrid();

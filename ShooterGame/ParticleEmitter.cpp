@@ -53,6 +53,10 @@ void ParticleEmitter::Tick(float customTime)
 		}
 	}
 
+	#ifdef _DEBUG
+	m_debugMaxParticleCount = std::max(m_debugMaxParticleCount, m_particles.size());
+	#endif
+
 	// Update existing particles
 	for (int i = m_particles.size() - 1; i >= 0; i--)
 	{
