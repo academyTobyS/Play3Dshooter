@@ -73,8 +73,8 @@ void GameObjectManager::UpdateAll()
 {
 	for( int i = 0; i < m_pGameObjectList.size(); i++ ) 
 	{
-		m_pGameObjectList[ i ]->Update();
 		m_pGameObjectList[ i ]->StandardMovementUpdate();
+		m_pGameObjectList[ i ]->Update();
 	}
 	CollideAll();
 	CleanUpAll();
