@@ -10,5 +10,9 @@ public:
 	void Draw() const override;
 
 private:
+	void FireCannon(int cannonId, float speed = 0.f);
+	void ActivateLaser(int laserId);
+	void DisableLaser(int laserId);
+	float m_fireCooldown{0.f};
 };
 

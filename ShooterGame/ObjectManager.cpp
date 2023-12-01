@@ -5,6 +5,8 @@
 #include "ObjectPlayer.h"
 #include "ObjectPellet.h"
 #include "ObjectBoss.h"
+#include "ObjectBossPellet.h"
+#include "ObjectAsteroid.h"
 
 // **************************************************************************************************
 // These functions provide global access to the GameObjectManager class throughout the codebase
@@ -63,6 +65,14 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 
 	case TYPE_BOSS:
 		pNewObj = new ObjectBoss(pos);
+		break;
+
+	case TYPE_BOSS_PELLET:
+		pNewObj = new ObjectBossPellet(pos);
+		break;
+
+	case TYPE_ASTEROID:
+		pNewObj = new ObjectAsteroid(pos);
 		break;
 	}
 

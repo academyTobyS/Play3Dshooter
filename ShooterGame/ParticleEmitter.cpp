@@ -1,12 +1,7 @@
 #include "ParticleEmitter.h"
+#include "RandUtility.h"
 
 // Helper functions
-float RandValueInRange(const float min, const float max)
-{
-	PLAY_ASSERT(min <= max);
-	return min + ((max - min) * (static_cast<float>(rand()) / RAND_MAX));
-}
-
 void ParticleEmitter::ApplySettings(const ParticleEmitterSettings& rSettings) 
 {	
 	m_settings = rSettings;

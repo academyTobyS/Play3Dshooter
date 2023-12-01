@@ -46,7 +46,16 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectBoss.h" />
+    <ClInclude Include="ObjectBoss.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectAsteroid.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RandUtility.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBossPellet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -79,7 +88,16 @@
     <ClCompile Include="ObjectPellet.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectAsteroid.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
     <ClCompile Include="ObjectBoss.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RandUtility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBossPellet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

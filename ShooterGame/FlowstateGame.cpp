@@ -1,6 +1,7 @@
 #include "Play3d.h"
 #include "FlowstateGame.h"
 #include "ObjectManager.h"
+#include "RandUtility.h"
 
 using namespace Play3d;
 
@@ -57,11 +58,11 @@ void FlowstateGame::SetGameCamera()
 	*/
 	
 	// Ortho View
-	Vector3f camEye{ 0.f, 0.f, -5.f };
+	Vector3f camEye{ GetObjectManager()->GetPlayer()->GetPosition().x / 8, 0.f, -5.f};
 	Vector3f forward{ 0.f, 0.f, 1.f };
 	Vector3f up{ 0.f, 1.f, 0.f };
 	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
-	Matrix4x4f projectOrtho = MatrixOrthoProjectRH(-7.f, 7.f, -1.75f, 6.5f, 0.f, 10.f);
+	Matrix4x4f projectOrtho = MatrixOrthoProjectRH(-7.f, 7.f, -1.75f, 6.5f, 0.f, 20.f);
 
 	Graphics::SetViewport(Graphics::Viewport(surfaceSize));
 	Graphics::SetViewMatrix(view);
@@ -73,10 +74,6 @@ eFlowstates FlowstateGame::Update()
 	if (Input::IsKeyPressed(VK_F1))
 	{
 		m_debugCam = !m_debugCam;
-		if (!m_debugCam)
-		{
-			SetGameCamera();
-		}
 	}
 
 	if(m_debugCam)
@@ -84,11 +81,15 @@ eFlowstates FlowstateGame::Update()
 		Demo::UpdateDebugCamera();
 		Demo::SetDebugCameraMatrices();
 	}
+	else
+	{
+		SetGameCamera();
+	}
 
 	GameObjectManager* pObjs{ GetObjectManager() };
 	pObjs->UpdateAll();
 	m_emitter.Tick();
-	m_emitter.m_position.x = (pObjs->GetPlayer()->GetPosition().x) * -0.2f;
+	//m_emitter.m_position.x = (pObjs->GetPlayer()->GetPosition().x) * -0.2f;
 
 	return eFlowstates::STATE_NULL;
 }

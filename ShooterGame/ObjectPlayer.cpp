@@ -145,7 +145,7 @@ void ObjectPlayer::Update()
 	if (m_bIsBarrelRoll)
 	{
 		float rollCompletion = 1 - (m_rollCooldown / BARREL_ROLL_TIME); // 0.f to 1.f: start to finish
-		m_rotation.y = (m_bDoubleTapLeft ? -kfTwoPi : kfTwoPi) * rollCompletion;
+		m_rotation.y = (m_bDoubleTapLeft ? -kfTwoPi : kfTwoPi) * rollCompletion / 2; // half roll looks better with current model
 	}
 	if (!m_bIsBarrelRoll)
 	{
