@@ -21,6 +21,8 @@ void FlowstateGame::EnterState()
 	GameObject* pPlayer = pObjs->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, -1.f, 0.f));
 	pObjs->SetPlayer(pPlayer);
 
+	pObjs->CreateObject(GameObjectType::TYPE_BOSS, Vector3f(0.f, 5.f, 0.f));
+
 	// Setup stars
 	ParticleEmitterSettings s;
 	s.capacity = 300;
@@ -45,16 +47,25 @@ void FlowstateGame::SetGameCamera()
 	Graphics::SurfaceSize surfaceSize = Graphics::GetDisplaySurfaceSize();
 	f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(15.f);
 
+	// Perspective View
+	/*
 	Vector3f camEye{0.f, 2.5f, -10.f};
 	Vector3f forward{0.f, 0.f, 1.f};
 	Vector3f up{0.f, 1.f, 0.f};
-
 	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
 	Matrix4x4f project = MatrixPerspectiveProjectRH(fovY, aspect, nearZ, farZ);
+	*/
+	
+	// Ortho View
+	Vector3f camEye{ 0.f, 0.f, -5.f };
+	Vector3f forward{ 0.f, 0.f, 1.f };
+	Vector3f up{ 0.f, 1.f, 0.f };
+	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
+	Matrix4x4f projectOrtho = MatrixOrthoProjectRH(-7.f, 7.f, -1.75f, 6.5f, 0.f, 10.f);
 
-	Graphics::SetViewport(Graphics::Viewport(surfaceSize)); // prob scissor too.
+	Graphics::SetViewport(Graphics::Viewport(surfaceSize));
 	Graphics::SetViewMatrix(view);
-	Graphics::SetProjectionMatrix(project);
+	Graphics::SetProjectionMatrix(projectOrtho);
 }
 
 eFlowstates FlowstateGame::Update()

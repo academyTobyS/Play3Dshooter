@@ -4,7 +4,7 @@ using namespace Play3d;
 
 static constexpr float SHIP_HALFWIDTH{0.15f};
 
-static constexpr float COOLDOWN_DOUBLE_TAP{0.18f};
+static constexpr float COOLDOWN_DOUBLE_TAP{0.2f};
 static constexpr float BARREL_ROLL_TIME{0.25f};
 
 static constexpr float DELAY_AUTOFIRE{0.05f};
@@ -12,7 +12,7 @@ static constexpr float DELAY_ROLL{1.f};
 
 static constexpr float MAX_SPEED{.1f};
 static constexpr float STEER_SPEED_X{.6f};
-static constexpr float STEER_SPEED_Y{.4f};
+static constexpr float STEER_SPEED_Y{.5f};
 static constexpr float BARREL_ROLL_SPEED{MAX_SPEED * 3};
 
 static constexpr float SPIN_SPEED{1.f};
@@ -70,7 +70,7 @@ void ObjectPlayer::Update()
 	}
 
 	// STEER - VERTICAL
-	if (Input::IsKeyDown(VK_UP))
+	if (Input::IsKeyDown('W'))
 	{
 		m_velocity.y = std::min(m_velocity.y + (STEER_SPEED_Y * deltaTime), MAX_SPEED);
 
@@ -80,7 +80,7 @@ void ObjectPlayer::Update()
 		}
 		m_rotSpeed.x = std::min(m_rotSpeed.x + (SPIN_SPEED * deltaTime), MAX_ROT_SPEED);
 	}
-	else if (Input::IsKeyDown(VK_DOWN))
+	else if (Input::IsKeyDown('S'))
 	{
 		m_velocity.y = std::max(m_velocity.y - (STEER_SPEED_Y * deltaTime), -MAX_SPEED);
 
@@ -94,11 +94,11 @@ void ObjectPlayer::Update()
 	{
 		m_rotSpeed.x *= 0.86f;	// reduce spin
 		m_rotation.x *= 0.86f;	// reduce angle
-		m_velocity.y *= 0.86f;	// reduce speed
+		m_velocity.y *= 0.9f;	// reduce speed
 	}
 
 	// STEER - HORIZONTAL
-	if (Input::IsKeyDown(VK_LEFT))
+	if (Input::IsKeyDown('A'))
 	{
 		float thrust = std::min(m_velocity.x + (STEER_SPEED_X * deltaTime), MAX_SPEED);
 		m_velocity.x = std::max(m_velocity.x, thrust); // don't clamp velocity if already above max-speed (barrel rolls)
@@ -110,7 +110,7 @@ void ObjectPlayer::Update()
 		}
 		m_rotSpeed.y = std::max(m_rotSpeed.y - (SPIN_SPEED * deltaTime), -MAX_ROT_SPEED);
 	}
-	else if (Input::IsKeyDown(VK_RIGHT))
+	else if (Input::IsKeyDown('D'))
 	{
 		float thrust = std::max(m_velocity.x - (STEER_SPEED_X * deltaTime), -MAX_SPEED);
 		m_velocity.x = std::min(m_velocity.x, thrust); // don't clamp velocity if already above max-speed (barrel rolls)
@@ -157,7 +157,7 @@ void ObjectPlayer::Update()
 	}
 
 	// BARREL ROLL - Trigger
-	if (!m_bIsBarrelRoll && Input::IsKeyPressed(VK_LEFT))
+	if (!m_bIsBarrelRoll && Input::IsKeyPressed('A'))
 	{
 		if (m_bDoubleTapLeft && m_rollCooldown > 0.f)
 		{
@@ -175,7 +175,7 @@ void ObjectPlayer::Update()
 			m_rollCooldown = COOLDOWN_DOUBLE_TAP;
 		}
 	}
-	else if (!m_bIsBarrelRoll && Input::IsKeyPressed(VK_RIGHT))
+	else if (!m_bIsBarrelRoll && Input::IsKeyPressed('D'))
 	{
 		if (m_bDoubleTapRight && m_rollCooldown > 0.f)
 		{

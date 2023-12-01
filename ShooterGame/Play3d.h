@@ -5263,7 +5263,7 @@ namespace Play3d
 
 			u32 nTotalFaceCount = 0;
 
-			static constexpr u32 kMaxFaceVerts = 4;
+			static constexpr u32 kMaxFaceVerts = 5;
 			Vector3f facePositions[kMaxFaceVerts];
 			Vector3f faceNormals[kMaxFaceVerts];
 			Vector2f faceUVs[kMaxFaceVerts];

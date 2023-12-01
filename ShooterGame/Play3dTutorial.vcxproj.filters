@@ -46,6 +46,7 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectBoss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -77,6 +78,9 @@
     </ClCompile>
     <ClCompile Include="ObjectPellet.cpp">
       <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBoss.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

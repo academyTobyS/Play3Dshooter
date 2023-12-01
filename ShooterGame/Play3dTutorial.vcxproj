@@ -153,6 +153,7 @@
     <ClInclude Include="FlowstateMachine.h" />
     <ClInclude Include="FlowstateMenu.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ObjectBoss.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectPellet.h" />
     <ClInclude Include="ParticleEmitter.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="FlowstateMenu.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="ObjectBoss.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectPellet.cpp" />

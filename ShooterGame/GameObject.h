@@ -7,6 +7,8 @@ enum GameObjectType
 	TYPE_NULL = -1,
 	TYPE_PLAYER,
 	TYPE_PLAYER_PELLET,
+	TYPE_BOSS,
+	TYPE_BOSS_PELLET
 };
 
 class GameObject
