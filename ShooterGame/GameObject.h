@@ -53,13 +53,14 @@ public:
 
 protected:
 	Play3d::Graphics::MeshId AssignMesh(Play3d::Graphics::MeshId& rId, const char* filepath);
-	Play3d::Graphics::MaterialId AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* filepath = "");
+	Play3d::Graphics::MaterialId AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* textureFilepath = "");
+	Play3d::Graphics::MaterialId AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* vertShaderFilepath, const char* fragShaderFilepath, const char* textureFilepath = "");
 
 	// Mostly just adapted from Play::GameObject
 	GameObjectType m_type{ GameObjectType::TYPE_NULL };
 
-	Play3d::Graphics::MeshId m_meshId{ -1 };
-	Play3d::Graphics::MaterialId m_materialId{ -1 };
+	Play3d::Graphics::MeshId m_meshId{};
+	Play3d::Graphics::MaterialId m_materialId{};
 
 	Play3d::Vector3f m_pos{ 0.f, 0.f, 0.f };
 	Play3d::Vector3f m_oldPos{ 0.f, 0.f, 0.f };

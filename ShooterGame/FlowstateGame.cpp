@@ -68,17 +68,16 @@ eFlowstates FlowstateGame::Update()
 		}
 	}
 
-	GameObjectManager* pObjs{ GetObjectManager() };
 	if(m_debugCam)
 	{
 		Demo::UpdateDebugCamera();
 		Demo::SetDebugCameraMatrices();
 	}
 
+	GameObjectManager* pObjs{ GetObjectManager() };
 	pObjs->UpdateAll();
 	m_emitter.Tick();
-
-	m_emitter.m_position.x = (-pObjs->GetPlayer()->GetPosition().x) * 0.2f;
+	m_emitter.m_position.x = (pObjs->GetPlayer()->GetPosition().x) * -0.2f;
 
 	return eFlowstates::STATE_NULL;
 }
@@ -93,10 +92,8 @@ void FlowstateGame::Draw()
 
 	Graphics::BeginPrimitiveBatch();
 
-	//Demo::DrawDebugGrid();
 	GetObjectManager()->DrawAll();
 	m_emitter.Draw();
-
 
 	// Debug Text
 	UI::FontId fontId = UI::GetDebugFont();

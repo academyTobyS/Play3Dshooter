@@ -96,3 +96,39 @@ Graphics::MaterialId GameObject::AssignMaterial(Graphics::MaterialId& rId, const
 	}
 	return rId;
 }
+
+Graphics::MaterialId GameObject::AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* vertShaderFilepath, const char* fragShaderFilepath, const char* textureFilepath)
+{
+	if (rId.IsInvalid())
+	{
+		using namespace Graphics;
+		ShaderId customPixelShader;
+		{
+			static const char* hlslCode = R"(
+			struct PSInput
+			{
+				float4 position : SV_POSITION;
+				float4 colour : COLOUR;
+			};
+			float4 PS_Main(PSInput input) : SV_TARGET
+			{
+				return float4(input.position.x * 0.001, input.position.y*0.001, 0.5, 1.0);
+			})";
+
+			ShaderCompilerDesc compilerOptions = {};
+			compilerOptions.m_name = "Example PS Shader";
+			compilerOptions.m_type = Graphics::ShaderType::PIXEL_SHADER;
+			compilerOptions.m_hlslCode = hlslCode;
+			compilerOptions.m_entryPoint = "PS_Main";
+			compilerOptions.m_defines.push_back({ "LIGHTS", "4" });
+			customPixelShader = Shader::Compile(compilerOptions);
+		}
+
+		ComplexMaterialDesc desc = {};
+		desc.m_state.m_cullMode = Graphics::CullMode::BACK;
+		desc.m_state.m_fillMode = Graphics::FillMode::SOLID;
+		desc.m_PixelShader = customPixelShader;
+
+		return Resources::CreateAsset<Graphics::Material>(desc);
+	}
+}
