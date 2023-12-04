@@ -7,7 +7,7 @@ static Graphics::MaterialId s_materialId{};
 ObjectBossPellet::ObjectBossPellet(Play3d::Vector3f position) : GameObject(TYPE_BOSS_PELLET, position)
 {
 	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\pelletEnemy.obj");
-	m_materialId = AssignMaterial(s_materialId);
+	m_materialId = AssignMaterialHLSL(s_materialId, "..\\Assets\\Shaders\\BossPellet.hlsl");
 }
 
 void ObjectBossPellet::Update()

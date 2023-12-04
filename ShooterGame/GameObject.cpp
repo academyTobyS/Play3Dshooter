@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include <fstream>
 
 using namespace Play3d;
 
@@ -74,6 +75,7 @@ Graphics::MeshId GameObject::AssignMesh(Graphics::MeshId& rId, const char* filep
 	return rId;
 }
 
+// Create basic texture material
 Graphics::MaterialId GameObject::AssignMaterial(Graphics::MaterialId& rId, const char* filepath)
 {
 	if (rId.IsInvalid())
@@ -97,37 +99,50 @@ Graphics::MaterialId GameObject::AssignMaterial(Graphics::MaterialId& rId, const
 	return rId;
 }
 
-Graphics::MaterialId GameObject::AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* vertShaderFilepath, const char* fragShaderFilepath, const char* textureFilepath)
+void GetFileAsString(const char* filepath, std::string& out_filestring)
+{
+	out_filestring = "";
+	std::string line = "";
+	std::ifstream shaderFile(filepath);
+	PLAY_ASSERT(shaderFile.is_open());
+	while (std::getline(shaderFile, line))
+	{
+		out_filestring += line;
+	}
+	shaderFile.close();
+}
+
+// Create custom HLSL material (with optional texture)
+Graphics::MaterialId GameObject::AssignMaterialHLSL(Play3d::Graphics::MaterialId& rId, const char* fragShaderFilepath, const char* textureFilepath)
 {
 	if (rId.IsInvalid())
 	{
 		using namespace Graphics;
-		ShaderId customPixelShader;
+
+		ShaderId fragShader;
 		{
-			static const char* hlslCode = R"(
-			struct PSInput
-			{
-				float4 position : SV_POSITION;
-				float4 colour : COLOUR;
-			};
-			float4 PS_Main(PSInput input) : SV_TARGET
-			{
-				return float4(input.position.x * 0.001, input.position.y*0.001, 0.5, 1.0);
-			})";
+			std::string shaderContents;
+			GetFileAsString(fragShaderFilepath, shaderContents);
 
 			ShaderCompilerDesc compilerOptions = {};
-			compilerOptions.m_name = "Example PS Shader";
+			compilerOptions.m_name = fragShaderFilepath;
 			compilerOptions.m_type = Graphics::ShaderType::PIXEL_SHADER;
-			compilerOptions.m_hlslCode = hlslCode;
+			compilerOptions.m_hlslCode = shaderContents.c_str();
 			compilerOptions.m_entryPoint = "PS_Main";
-			compilerOptions.m_defines.push_back({ "LIGHTS", "4" });
-			customPixelShader = Shader::Compile(compilerOptions);
+			//compilerOptions.m_defines.push_back({ "LIGHTS", "4" }); // reference code for adding defines, safe to delete
+			fragShader = Shader::Compile(compilerOptions);
 		}
 
 		ComplexMaterialDesc desc = {};
 		desc.m_state.m_cullMode = Graphics::CullMode::BACK;
 		desc.m_state.m_fillMode = Graphics::FillMode::SOLID;
-		desc.m_PixelShader = customPixelShader;
+		desc.m_PixelShader = fragShader;
+
+		if (textureFilepath != "")
+		{
+			desc.m_texture[0] = Graphics::CreateTextureFromFile(textureFilepath);
+			desc.m_sampler[0] = Graphics::CreateLinearSampler();
+		}
 
 		return Resources::CreateAsset<Graphics::Material>(desc);
 	}

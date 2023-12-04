@@ -57,7 +57,7 @@ public:
 protected:
 	Play3d::Graphics::MeshId AssignMesh(Play3d::Graphics::MeshId& rId, const char* filepath);
 	Play3d::Graphics::MaterialId AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* textureFilepath = "");
-	Play3d::Graphics::MaterialId AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* vertShaderFilepath, const char* fragShaderFilepath, const char* textureFilepath = "");
+	Play3d::Graphics::MaterialId AssignMaterialHLSL(Play3d::Graphics::MaterialId& rId, const char* fragShaderFilepath, const char* textureFilepath = "");
 
 	// Mostly just adapted from Play::GameObject
 	GameObjectType m_type{ GameObjectType::TYPE_NULL };
