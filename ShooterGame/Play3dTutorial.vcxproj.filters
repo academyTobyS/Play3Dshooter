@@ -52,11 +52,14 @@
     <ClInclude Include="ObjectAsteroid.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="RandUtility.h">
+    <ClInclude Include="UtilityFunctions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjectBossPellet.h">
       <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameHud.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,11 +99,14 @@
     <ClCompile Include="ObjectBoss.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="RandUtility.cpp">
+    <ClCompile Include="UtilityFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ObjectBossPellet.cpp">
       <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameHud.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

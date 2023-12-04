@@ -1,5 +1,6 @@
 #pragma once
 #include "Play3D.h"
+#include "UtilityFunctions.h"
 
 // The GameObject type is the only representation of type which is visible to code externally
 enum GameObjectType
@@ -55,10 +56,6 @@ public:
 	Play3d::Vector3f GetRotation() { return m_rotation; }
 
 protected:
-	Play3d::Graphics::MeshId AssignMesh(Play3d::Graphics::MeshId& rId, const char* filepath);
-	Play3d::Graphics::MaterialId AssignMaterial(Play3d::Graphics::MaterialId& rId, const char* textureFilepath = "");
-	Play3d::Graphics::MaterialId AssignMaterialHLSL(Play3d::Graphics::MaterialId& rId, const char* fragShaderFilepath, const char* textureFilepath = "");
-
 	// Mostly just adapted from Play::GameObject
 	GameObjectType m_type{ GameObjectType::TYPE_NULL };
 

@@ -152,6 +152,7 @@
     <ClInclude Include="FlowstateGame.h" />
     <ClInclude Include="FlowstateMachine.h" />
     <ClInclude Include="FlowstateMenu.h" />
+    <ClInclude Include="GameHud.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectAsteroid.h" />
     <ClInclude Include="ObjectBoss.h" />
@@ -161,12 +162,13 @@
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Play3d.h" />
     <ClInclude Include="ObjectPlayer.h" />
-    <ClInclude Include="RandUtility.h" />
+    <ClInclude Include="UtilityFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FlowstateGame.cpp" />
     <ClCompile Include="FlowstateMachine.cpp" />
     <ClCompile Include="FlowstateMenu.cpp" />
+    <ClCompile Include="GameHud.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ObjectAsteroid.cpp" />
@@ -177,7 +179,7 @@
     <ClCompile Include="ObjectPellet.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
-    <ClCompile Include="RandUtility.cpp" />
+    <ClCompile Include="UtilityFunctions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #include "ParticleEmitter.h"
-#include "RandUtility.h"
+#include "UtilityFunctions.h"
 
 // Helper functions
 void ParticleEmitter::ApplySettings(const ParticleEmitterSettings& rSettings) 

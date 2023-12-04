@@ -20,8 +20,8 @@ static constexpr float MAX_ROT_SPEED{.1f};
 static constexpr float MAX_ROT_X{kfQuartPi / 2.f};
 static constexpr float MAX_ROT_Y{kfQuartPi / 4.f};
 
-static const Vector2f MIN_POS{-7.f, -1.25f};
-static const Vector2f MAX_POS{7.f, 5.f};
+static const Vector2f MIN_POS{-9.f, -7.f};
+static const Vector2f MAX_POS{9.f, 7.f};
 
 static Graphics::MeshId s_meshId{};
 static Graphics::MaterialId s_materialId{};

@@ -1,6 +1,7 @@
 #pragma once
 #include "Flowstate.h"
 #include "ParticleEmitter.h"
+#include "GameHud.h"
 
 class FlowstateGame : public Flowstate
 {
@@ -15,5 +16,6 @@ private:
 	void SetGameCamera();
 
 	ParticleEmitter m_emitter;
+	GameHud m_hud;
 	bool m_debugCam{ false };
 };

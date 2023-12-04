@@ -1,7 +1,7 @@
 #include "Play3d.h"
 #include "FlowstateGame.h"
 #include "ObjectManager.h"
-#include "RandUtility.h"
+#include "UtilityFunctions.h"
 
 using namespace Play3d;
 
@@ -19,14 +19,14 @@ void FlowstateGame::EnterState()
 
 	// Setup player
 	GameObjectManager* pObjs{ GetObjectManager() };
-	GameObject* pPlayer = pObjs->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, -1.f, 0.f));
+	GameObject* pPlayer = pObjs->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, -GetGameHalfHeight() / 1.25f, 0.f));
 	pObjs->SetPlayer(pPlayer);
 
-	pObjs->CreateObject(GameObjectType::TYPE_BOSS, Vector3f(0.f, 5.f, 0.f));
+	pObjs->CreateObject(GameObjectType::TYPE_BOSS, Vector3f(0.f, GetGameHalfHeight() / 1.25f, 0.f));
 
 	// Setup stars
 	ParticleEmitterSettings s;
-	s.capacity = 300;
+	s.capacity = 400;
 	s.emitterMinExtents = Vector3f(-10.f, 0.f, -0.6f);
 	s.emitterMaxExtents = Vector3f(10.f, 0.f, 0.6f);
 	s.particleMinVelocity.y = -5.f;
@@ -34,7 +34,7 @@ void FlowstateGame::EnterState()
 	s.emitWaitMin = 0.01f;
 	s.emitWaitMax = 0.1f;
 	s.particlesRelativeToEmitter = true;
-	s.particleLifetime = 4.f;
+	s.particleLifetime = 6.f;
 	s.particlesPerEmit = 4;
 	m_emitter.ApplySettings(s);
 	m_emitter.m_position.y = 10.f;
@@ -46,10 +46,10 @@ void FlowstateGame::EnterState()
 void FlowstateGame::SetGameCamera()
 {
 	Graphics::SurfaceSize surfaceSize = Graphics::GetDisplaySurfaceSize();
-	f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(15.f);
 
 	// Perspective View
 	/*
+	//f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(15.f);
 	Vector3f camEye{0.f, 2.5f, -10.f};
 	Vector3f forward{0.f, 0.f, 1.f};
 	Vector3f up{0.f, 1.f, 0.f};
@@ -58,11 +58,11 @@ void FlowstateGame::SetGameCamera()
 	*/
 	
 	// Ortho View
-	Vector3f camEye{ GetObjectManager()->GetPlayer()->GetPosition().x / 8, 0.f, -5.f};
+	Vector3f camEye{ 0.f, 0.f, -10.f};
 	Vector3f forward{ 0.f, 0.f, 1.f };
 	Vector3f up{ 0.f, 1.f, 0.f };
 	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
-	Matrix4x4f projectOrtho = MatrixOrthoProjectRH(-7.f, 7.f, -1.75f, 6.5f, 0.f, 20.f);
+	Matrix4x4f projectOrtho = MatrixOrthoProjectRH(-GetGameHalfWidth(), GetGameHalfWidth(), -GetGameHalfHeight(), GetGameHalfHeight(), 0.f, 100.f);
 
 	Graphics::SetViewport(Graphics::Viewport(surfaceSize));
 	Graphics::SetViewMatrix(view);
@@ -100,19 +100,18 @@ void FlowstateGame::Draw()
 	if (m_debugCam)
 	{
 		Demo::DrawDebugGrid();
+		UI::FontId fontId = UI::GetDebugFont();
+		static u32 frameCounter = 0;
+		UI::DrawString(fontId, Vector2f(20, 20), Colour::White, "Play3d, Single Header DX11");
+		UI::DrawPrintf(fontId, Vector2f(20, 50), Colour::Lightblue, "[frame %d, delta=%.2fms elapsed=%.2fs]", frameCounter++, System::GetDeltaTime() * 1000.f, System::GetElapsedTime());
 	}
 
-	Graphics::BeginPrimitiveBatch();
+	m_hud.Draw();
 
+	// Gameobjects may make use of primitive batch for various purposes
+	Graphics::BeginPrimitiveBatch();
 	GetObjectManager()->DrawAll();
 	m_emitter.Draw();
-
-	// Debug Text
-	UI::FontId fontId = UI::GetDebugFont();
-	static u32 frameCounter = 0;
-	UI::DrawString(fontId, Vector2f(20, 20), Colour::White, "Play3d, Single Header DX11");
-	UI::DrawPrintf(fontId, Vector2f(20, 50), Colour::Lightblue, "[frame %d, delta=%.2fms elapsed=%.2fs]", frameCounter++, System::GetDeltaTime() * 1000.f, System::GetElapsedTime());
-
 	Graphics::EndPrimitiveBatch();
 }
 
