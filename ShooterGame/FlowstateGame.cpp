@@ -10,11 +10,11 @@ void FlowstateGame::EnterState()
 	// The lighting interface allows us to set some light properties.
 	// This could be animated during a frame.
 	// Here we use using 3 lights in differing directions Red, Green and Blue
-	Graphics::SetLightColour(0, ColourValue(0xFF0000));
+	Graphics::SetLightColour(0, ColourValue(0xFFFFFF));
 	Graphics::SetLightDirection(0, Vector3f(1, 1, 1));
-	Graphics::SetLightColour(1, ColourValue(0x00FF00));
+	Graphics::SetLightColour(1, ColourValue(0xFFFFFF));
 	Graphics::SetLightDirection(1, Vector3f(1, 1, -1));
-	Graphics::SetLightColour(2, ColourValue(0x0000FF));
+	Graphics::SetLightColour(2, ColourValue(0xFFFFFF));
 	Graphics::SetLightDirection(2, Vector3f(-1, 1, -1));
 
 	// Setup player

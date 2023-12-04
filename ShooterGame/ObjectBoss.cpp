@@ -17,8 +17,8 @@ static constexpr float COOLDOWN_FIRE{0.5f};
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\boss.obj");
-	m_materialId = AssignMaterial(s_materialId);
+	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\_station.obj");
+	m_materialId = AssignMaterial(s_materialId, "..\\Assets\\Models\\_station-red.jpg");
 }
 
 void ObjectBoss::Update()

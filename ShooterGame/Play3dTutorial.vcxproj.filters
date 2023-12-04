@@ -55,7 +55,9 @@
     <ClInclude Include="RandUtility.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectBossPellet.h" />
+    <ClInclude Include="ObjectBossPellet.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -98,7 +100,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ObjectBossPellet.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

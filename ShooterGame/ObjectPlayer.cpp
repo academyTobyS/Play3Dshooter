@@ -28,8 +28,8 @@ static Graphics::MaterialId s_materialId{};
 
 ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\ship.obj");
-	m_materialId = AssignMaterial(s_materialId);
+	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\_fighter.obj");
+	m_materialId = AssignMaterial(s_materialId, "..\\Assets\\Models\\_fighter-blue.jpg");
 
 	ParticleEmitterSettings s;
 	s.capacity = 100;
@@ -145,7 +145,7 @@ void ObjectPlayer::Update()
 	if (m_bIsBarrelRoll)
 	{
 		float rollCompletion = 1 - (m_rollCooldown / BARREL_ROLL_TIME); // 0.f to 1.f: start to finish
-		m_rotation.y = (m_bDoubleTapLeft ? -kfTwoPi : kfTwoPi) * rollCompletion / 2; // half roll looks better with current model
+		m_rotation.y = (m_bDoubleTapLeft ? -kfTwoPi : kfTwoPi) * rollCompletion;
 	}
 	if (!m_bIsBarrelRoll)
 	{
