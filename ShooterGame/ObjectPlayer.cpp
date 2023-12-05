@@ -20,16 +20,15 @@ static constexpr float MAX_ROT_SPEED{.1f};
 static constexpr float MAX_ROT_X{kfQuartPi / 2.f};
 static constexpr float MAX_ROT_Y{kfQuartPi / 4.f};
 
+static constexpr float COOLDOWN_RESPAWN{2.f};
+
 static const Vector2f MIN_POS{-9.f, -7.f};
 static const Vector2f MAX_POS{9.f, 7.f};
 
-static Graphics::MeshId s_meshId{};
-static Graphics::MaterialId s_materialId{};
-
 ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\_fighter.obj");
-	m_materialId = AssignMaterial(s_materialId, "..\\Assets\\Models\\_fighter-blue.jpg");
+	AssignMesh(m_meshId, "..\\Assets\\Models\\_fighter.obj"); // main mesh
+	AssignMaterial(m_materialId, "..\\Assets\\Models\\_fighter-blue.jpg");
 
 	ParticleEmitterSettings s;
 	s.capacity = 100;
@@ -46,9 +45,47 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 
 	m_emitterLeftThruster.ApplySettings(s);
 	m_emitterRightThruster.ApplySettings(s);
+
+	m_collisionRadius = 0.4f;
+	m_collisionOffset.y = -0.1f;
 }
 
 void ObjectPlayer::Update()
+{
+	if (m_respawnCooldown <= 0.f)
+	{
+		HandleControls();
+	}
+	else
+	{
+		m_respawnCooldown -= System::GetDeltaTime();
+		if (m_respawnCooldown <= 0.f)
+		{
+			Respawn();
+		}
+	}
+}
+
+void ObjectPlayer::Respawn()
+{
+	m_pos = Vector3f(0.f, -GetGameHalfHeight() / 1.25f, 0.f);
+	m_velocity = Vector3f(0.f, 0.f, 0.f);
+	m_rotation = Vector3f(0.f, 0.f, 0.f);
+	m_bDoubleTapLeft = false;
+	m_bDoubleTapRight = false;
+	m_bIsBarrelRoll = false;
+	m_shootCooldown = 0.f;
+	m_rollCooldown = 0.f;
+	m_respawnCooldown = 0.f;
+
+	m_emitterLeftThruster.DestroyAll();
+	m_emitterRightThruster.DestroyAll();
+
+	SetHidden(false);
+	m_canCollide = true;
+}
+
+void ObjectPlayer::HandleControls()
 {
 	float deltaTime = System::GetDeltaTime();
 
@@ -122,7 +159,7 @@ void ObjectPlayer::Update()
 		}
 		m_rotSpeed.y = std::min(m_rotSpeed.y + (SPIN_SPEED * deltaTime), MAX_ROT_SPEED);
 	}
-	else if(!m_bIsBarrelRoll)
+	else if (!m_bIsBarrelRoll)
 	{
 		// Reduce all forces when not actively steering/rolling
 		m_rotSpeed.y *= 0.86f; // reduce spin
@@ -197,8 +234,8 @@ void ObjectPlayer::Update()
 	// Thruster particle rotation about ship
 	float c = cos(-m_rotation.y);
 	float s = sin(-m_rotation.y);
-	Vector3f thrusterLeftOffset{SHIP_HALFWIDTH, -SHIP_HALFWIDTH * 2, 0.f};
-	Vector3f thrusterRightOffset{-SHIP_HALFWIDTH, -SHIP_HALFWIDTH * 2, 0.f };
+	Vector3f thrusterLeftOffset{ SHIP_HALFWIDTH, -SHIP_HALFWIDTH * 2, 0.f };
+	Vector3f thrusterRightOffset{ -SHIP_HALFWIDTH, -SHIP_HALFWIDTH * 2, 0.f };
 	Vector3f temp = thrusterLeftOffset;
 	thrusterLeftOffset.x = (temp.x * c) - (temp.z * s);
 	thrusterLeftOffset.z = (temp.z * c) + (temp.x * s);
@@ -216,7 +253,7 @@ void ObjectPlayer::Update()
 	m_pos.y = std::clamp(m_pos.y, MIN_POS.y, MAX_POS.y);
 	if (cachedPos.x != m_pos.x)
 	{
-		if(!m_bIsBarrelRoll)
+		if (!m_bIsBarrelRoll)
 		{
 			m_velocity.x = 0.f;
 		}
@@ -224,6 +261,32 @@ void ObjectPlayer::Update()
 	if (cachedPos.y != m_pos.y)
 	{
 		m_velocity.y = 0.f;
+	}
+}
+
+void ObjectPlayer::OnCollision(GameObject* other)
+{
+	if(other->GetObjectType() == GameObjectType::TYPE_BOSS_PELLET || other->GetObjectType() == GameObjectType::TYPE_BOSS)
+	{
+		// Die > if lives remain, start respawn timer, else gameover
+		SetHidden(true);
+		m_canCollide = false;
+		m_respawnCooldown = COOLDOWN_RESPAWN;
+
+		GameObjectManager* pObjs{GetObjectManager()};
+		GameObject* pChunk;
+
+		pChunk = pObjs->CreateObject(TYPE_PLAYER_CHUNK_CORE, m_pos);
+		pChunk->SetVelocity((m_velocity / 8.f) + Vector3f(0.f, 0.01f, 0.f));
+		pChunk->SetRotationSpeed(m_rotation / 8.f);
+
+		pChunk = pObjs->CreateObject(TYPE_PLAYER_CHUNK_WING_L, m_pos);
+		pChunk->SetVelocity((m_velocity / 8.f) + Vector3f(0.01f, -0.01f, 0.f));
+		pChunk->SetRotationSpeed(-m_rotation / 8.f);
+
+		pChunk = pObjs->CreateObject(TYPE_PLAYER_CHUNK_WING_R, m_pos);
+		pChunk->SetVelocity((m_velocity / 8.f) + Vector3f(-0.01f, -0.01f, 0.f));
+		pChunk->SetRotationSpeed(-m_rotation / 8.f);
 	}
 }
 

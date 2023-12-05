@@ -17,5 +17,6 @@ private:
 
 	ParticleEmitter m_emitter;
 	GameHud m_hud;
-	bool m_debugCam{ false };
+	bool m_debugCam{false};
+	bool m_debugCollision{false};
 };

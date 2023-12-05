@@ -6,10 +6,19 @@
 enum GameObjectType
 {
 	TYPE_NULL = -1,
+
+	// Player objects
 	TYPE_PLAYER,
 	TYPE_PLAYER_PELLET,
+	TYPE_PLAYER_CHUNK_CORE,
+	TYPE_PLAYER_CHUNK_WING_L,
+	TYPE_PLAYER_CHUNK_WING_R,
+
+	// Enemy objects
 	TYPE_BOSS,
 	TYPE_BOSS_PELLET,
+
+	// Misc. objects
 	TYPE_ASTEROID
 };
 
@@ -24,6 +33,7 @@ public:
 	// Providing no implementation of the virtual Update function makes this an abstract base class
 	virtual void Update() = 0;
 	virtual void Draw() const;
+	virtual void DrawCollision() const;
 	// These virtuals have implementations and so are optional overrides
 	virtual void OnCollision( GameObject* ) {};
 
@@ -46,7 +56,7 @@ public:
 	void SetRotation( Play3d::Vector3f rotation ) { m_rotation = rotation; }
 	void SetRotationSpeed( Play3d::Vector3f rotationSpeed ) { m_rotSpeed = rotationSpeed; }
 	void SetFrame( float frame ) { m_frame = frame; }
-	void SetVisible( bool render ) { m_hidden = render; }
+	void SetHidden( bool hidden ) { m_hidden = hidden; }
 
 	// Getters
 	GameObjectType GetObjectType() { return m_type; }
@@ -69,7 +79,8 @@ protected:
 
 	Play3d::Vector3f m_rotation{ 0.f, 0.f, 0.f };
 	Play3d::Vector3f m_rotSpeed{ 0.f, 0.f, 0.f };
-	float m_radius{ -1.f };
+	Play3d::Vector3f m_collisionOffset{0.f, 0.f, 0.f};
+	float m_collisionRadius{ 1.f };
 
 	float m_frame{ -1 };
 	float m_frameTimer{ 0 };
@@ -77,4 +88,5 @@ protected:
 
 	bool m_destroy{ false };
 	bool m_hidden{ false };
+	bool m_canCollide{ true };
 };

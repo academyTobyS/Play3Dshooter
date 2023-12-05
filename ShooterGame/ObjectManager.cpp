@@ -3,6 +3,7 @@
 
 // Needs to know about all the object types so it can create them
 #include "ObjectPlayer.h"
+#include "ObjectPlayerChunk.h"
 #include "ObjectPellet.h"
 #include "ObjectBoss.h"
 #include "ObjectBossPellet.h"
@@ -63,6 +64,12 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 		pNewObj = new ObjectPellet(pos);
 		break;
 
+	case TYPE_PLAYER_CHUNK_CORE:
+	case TYPE_PLAYER_CHUNK_WING_L:
+	case TYPE_PLAYER_CHUNK_WING_R:
+		pNewObj = new ObjectPlayerChunk(objType, pos);
+		break;	
+
 	case TYPE_BOSS:
 		pNewObj = new ObjectBoss(pos);
 		break;
@@ -104,6 +111,19 @@ void GameObjectManager::DrawAll()
 		{
 			GameObject& obj = *m_pGameObjectList[ i ]; 
 			obj.Draw();
+		}
+	}
+}
+
+// Use the list of registered GameObjects to draw them all...
+void GameObjectManager::DrawCollisionAll()
+{
+	for (int i = 0; i < m_pGameObjectList.size(); i++)
+	{
+		if (!m_pGameObjectList[i]->IsHidden())
+		{
+			GameObject& obj = *m_pGameObjectList[i];
+			obj.DrawCollision();
 		}
 	}
 }

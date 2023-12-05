@@ -75,6 +75,10 @@ eFlowstates FlowstateGame::Update()
 	{
 		m_debugCam = !m_debugCam;
 	}
+	if (Input::IsKeyPressed(VK_F2))
+	{
+		m_debugCollision = !m_debugCollision;
+	}
 
 	if(m_debugCam)
 	{
@@ -104,6 +108,11 @@ void FlowstateGame::Draw()
 		static u32 frameCounter = 0;
 		UI::DrawString(fontId, Vector2f(20, 20), Colour::White, "Play3d, Single Header DX11");
 		UI::DrawPrintf(fontId, Vector2f(20, 50), Colour::Lightblue, "[frame %d, delta=%.2fms elapsed=%.2fs]", frameCounter++, System::GetDeltaTime() * 1000.f, System::GetElapsedTime());
+	}
+
+	if (m_debugCollision)
+	{
+		GetObjectManager()->DrawCollisionAll();
 	}
 
 	m_hud.Draw();

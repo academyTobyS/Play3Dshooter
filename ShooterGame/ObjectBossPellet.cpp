@@ -8,11 +8,21 @@ ObjectBossPellet::ObjectBossPellet(Play3d::Vector3f position) : GameObject(TYPE_
 {
 	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\pelletEnemy.obj");
 	m_materialId = AssignMaterialHLSL(s_materialId, "..\\Assets\\Shaders\\BossPellet.hlsl");
+
+	m_collisionRadius = 0.15f;
 }
 
 void ObjectBossPellet::Update()
 {
 	if(m_pos.y < -2.f)
+	{
+		Destroy();
+	}
+}
+
+void ObjectBossPellet::OnCollision(GameObject* other)
+{
+	if(other->GetObjectType() == GameObjectType::TYPE_PLAYER)
 	{
 		Destroy();
 	}

@@ -36,5 +36,4 @@ void GameHud::Draw()
 	// Foreground HUD texture
 	Graphics::SetMaterial(s_matHud);
 	Graphics::DrawMesh(m_meshFullscreen, MatrixTranslate(0.f, 0.f, hudDepth) * MatrixRotationX<f32>(kfHalfPi) * MatrixRotationZ<f32>(kfPi));
-
 }

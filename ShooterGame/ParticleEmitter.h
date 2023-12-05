@@ -25,7 +25,6 @@ struct ParticleEmitterSettings
 	int particlesPerEmit{1};
 	int capacity{100};
 
-	bool destroyOffscreen{true};
 	bool particlesRelativeToEmitter{false};
 };
 

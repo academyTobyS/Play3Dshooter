@@ -8,6 +8,10 @@ public:
 	ObjectPlayer(Play3d::Vector3f position);
 
 	void Update() override;
+	void Respawn();
+	void HandleControls();
+	void OnCollision(GameObject* other) override;
+
 	void Draw() const override;
 
 private:
@@ -16,7 +20,7 @@ private:
 	bool m_bIsBarrelRoll{false};
 	float m_shootCooldown{0.f};
 	float m_rollCooldown{0.f};
+	float m_respawnCooldown{0.f};
 	ParticleEmitter m_emitterLeftThruster;
 	ParticleEmitter m_emitterRightThruster;
 };
-

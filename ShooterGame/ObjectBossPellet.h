@@ -9,6 +9,8 @@ public:
 	void Update() override;
 	//void Draw() const override;
 
+	void OnCollision(GameObject* other) override;
+
 private:
 };
 

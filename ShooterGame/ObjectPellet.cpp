@@ -8,6 +8,8 @@ ObjectPellet::ObjectPellet(Play3d::Vector3f position) : GameObject(TYPE_PLAYER_P
 {
 	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\pellet.obj");
 	m_materialId = AssignMaterialHLSL(s_materialId, "..\\Assets\\Shaders\\PlayerPellet.hlsl");
+
+	m_collisionRadius = 0.1f;
 }
 
 void ObjectPellet::Update()
@@ -17,4 +19,6 @@ void ObjectPellet::Update()
 	{
 		Destroy();
 	}
+
+	//if()
 }

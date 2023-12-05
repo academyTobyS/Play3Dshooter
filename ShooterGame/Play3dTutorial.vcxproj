@@ -159,6 +159,7 @@
     <ClInclude Include="ObjectBossPellet.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectPellet.h" />
+    <ClInclude Include="ObjectPlayerChunk.h" />
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Play3d.h" />
     <ClInclude Include="ObjectPlayer.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectPellet.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
+    <ClCompile Include="ObjectPlayerChunk.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="UtilityFunctions.cpp" />
   </ItemGroup>

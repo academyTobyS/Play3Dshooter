@@ -14,6 +14,7 @@ public:
 
 	void UpdateAll();
 	void DrawAll();
+	void DrawCollisionAll();
 	void CollideAll();
 	void CleanUpAll(); 
 
