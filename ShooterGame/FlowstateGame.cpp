@@ -126,5 +126,5 @@ void FlowstateGame::Draw()
 
 void FlowstateGame::ExitState()
 {
-
+	DestroyObjectManager();
 }

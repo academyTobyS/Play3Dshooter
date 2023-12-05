@@ -1,15 +1,13 @@
 #include "ObjectAsteroid.h"
+#include "ObjectManager.h"
 using namespace Play3d;
-
-static Graphics::MeshId s_meshId{};
-static Graphics::MaterialId s_materialId{};
 
 static constexpr float MAX_WOBBLE{kfPi};
 
 ObjectAsteroid::ObjectAsteroid(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\asteroid.obj");
-	m_materialId = AssignMaterial(s_materialId);
+	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\asteroid.obj");
+	m_materialId = GetObjectManager()->GetMaterial();
 }
 
 void ObjectAsteroid::Update()

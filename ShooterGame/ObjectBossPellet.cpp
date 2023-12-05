@@ -1,13 +1,11 @@
 #include "ObjectBossPellet.h"
+#include "ObjectManager.h"
 using namespace Play3d;
-
-static Graphics::MeshId s_meshId{};
-static Graphics::MaterialId s_materialId{};
 
 ObjectBossPellet::ObjectBossPellet(Play3d::Vector3f position) : GameObject(TYPE_BOSS_PELLET, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\pelletEnemy.obj");
-	m_materialId = AssignMaterialHLSL(s_materialId, "..\\Assets\\Shaders\\BossPellet.hlsl");
+	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\pelletEnemy.obj");
+	m_materialId = GetObjectManager()->GetMaterialHLSL("..\\Assets\\Shaders\\BossPellet.hlsl");
 
 	m_collisionRadius = 0.15f;
 }

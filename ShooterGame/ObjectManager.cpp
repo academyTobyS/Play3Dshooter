@@ -9,12 +9,6 @@
 #include "ObjectBossPellet.h"
 #include "ObjectAsteroid.h"
 
-// **************************************************************************************************
-// These functions provide global access to the GameObjectManager class throughout the codebase
-// This is a prototypical "singleton" design pattern, but avoiding the use of the 'static' keyword
-// which causes a lot of confusion for new programmers
-// **************************************************************************************************
-
 // A global pointer to a GameObjectManager instance (not delared/visible outside of this compilation unit)
 GameObjectManager* g_pObjMan = nullptr;
 
@@ -88,6 +82,113 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 
 	PLAY_ASSERT(pNewObj);
 	return pNewObj;
+}
+
+Play3d::Graphics::MeshId GameObjectManager::GetMesh(const char* filepath)
+{
+	if (m_meshRegister.count(filepath) == 0)
+	{
+		m_meshRegister.insert(std::pair<const char*, Play3d::Graphics::MeshId>(
+			filepath,
+			Play3d::Graphics::CreateMeshFromObjFile(filepath, Play3d::Colour::White, 0.25f)
+		));
+	}
+	return m_meshRegister.at(filepath);
+}
+
+Play3d::Graphics::MaterialId GameObjectManager::GetMaterial(const char* filepath)
+{
+	if (m_materialRegister.count(filepath) == 0)
+	{
+		Play3d::Graphics::SimpleMaterialDesc desc;
+		desc.m_state.m_cullMode = Play3d::Graphics::CullMode::BACK;
+		desc.m_state.m_fillMode = Play3d::Graphics::FillMode::SOLID;
+		Play3d::Colour::White.as_float_rgba_srgb(&desc.m_constants.diffuseColour.x);
+		desc.m_bEnableLighting = true;
+		desc.m_lightCount = 3;
+
+		if (filepath != "")
+		{
+			desc.m_texture[0] = Play3d::Graphics::CreateTextureFromFile(filepath);
+			desc.m_sampler[0] = Play3d::Graphics::CreateLinearSampler();
+		}
+
+		m_materialRegister.insert(std::pair<const char*, Play3d::Graphics::MaterialId>(
+			filepath,
+			Play3d::Resources::CreateAsset<Play3d::Graphics::Material>(desc)
+		));
+
+	}
+
+	return m_materialRegister.at(filepath);
+}
+
+Play3d::Graphics::MaterialId GameObjectManager::GetMaterialHLSL(const char* hlslPath, const char* texturePath)
+{
+	static const int bufferSize{80};
+	char buffer[bufferSize];
+	strcpy_s(buffer, bufferSize, hlslPath);
+	strcat_s(buffer, bufferSize, texturePath);
+
+	if(m_materialRegister.count(buffer) == 0)
+	{
+		using namespace Play3d;
+
+		size_t fileSizeBytes;
+		const char* hlslCode = (const char*)System::LoadFileData(hlslPath, fileSizeBytes);
+		PLAY_ASSERT_MSG(hlslCode, "Could not load the shader file");
+
+		char shaderName[64];
+
+		Graphics::ShaderId customVertexShader;
+		{
+			sprintf_s(shaderName, 64, "%s_VS", hlslPath);
+			Graphics::ShaderCompilerDesc compilerOptions = {};
+			compilerOptions.m_name = shaderName;
+			compilerOptions.m_type = Graphics::ShaderType::VERTEX_SHADER;
+			compilerOptions.m_flags = (u32)Graphics::ShaderCompilationFlags::DEBUG;
+			compilerOptions.m_hlslCode = hlslCode;
+			compilerOptions.m_entryPoint = "VS_Main";
+			compilerOptions.m_defines.push_back({ "MAX_LIGHTS", "4" });
+			customVertexShader = Graphics::Shader::Compile(compilerOptions);
+			PLAY_ASSERT_MSG(customVertexShader.IsValid(), "Vertex Shader Compilation Failed!");
+		}
+
+		Graphics::ShaderId customPixelShader;
+		{
+			sprintf_s(shaderName, 64, "%s_PS", hlslPath);
+			Graphics::ShaderCompilerDesc compilerOptions = {};
+			compilerOptions.m_name = shaderName;
+			compilerOptions.m_type = Graphics::ShaderType::PIXEL_SHADER;
+			compilerOptions.m_flags = (u32)Graphics::ShaderCompilationFlags::DEBUG;
+			compilerOptions.m_hlslCode = hlslCode;
+			compilerOptions.m_entryPoint = "PS_Main";
+			compilerOptions.m_defines.push_back({ "MAX_LIGHTS", "4" });
+			customPixelShader = Graphics::Shader::Compile(compilerOptions);
+			PLAY_ASSERT_MSG(customVertexShader.IsValid(), "Pixel Shader Compilation Failed!");
+		}
+
+		System::ReleaseFileData(const_cast<char*>(hlslCode));
+
+		Graphics::ComplexMaterialDesc desc;
+		desc.m_state.m_cullMode = Graphics::CullMode::BACK;
+		desc.m_state.m_fillMode = Graphics::FillMode::SOLID;
+		desc.m_VertexShader = customVertexShader;
+		desc.m_PixelShader = customPixelShader;
+
+		if (texturePath != "")
+		{
+			desc.m_texture[0] = Graphics::CreateTextureFromFile(texturePath);
+			desc.m_sampler[0] = Graphics::CreateLinearSampler();
+		}
+
+		m_materialRegister.insert(std::pair<const char*, Play3d::Graphics::MaterialId>(
+			buffer,
+			Resources::CreateAsset<Graphics::Material>(desc)
+		));
+	}
+
+	return m_materialRegister.at(buffer);
 }
 
 // Use the list of registered GameObjects to update them all...

@@ -1,13 +1,11 @@
 #include "ObjectPellet.h"
+#include "ObjectManager.h"
 using namespace Play3d;
-
-static Graphics::MeshId s_meshId{};
-static Graphics::MaterialId s_materialId{};
 
 ObjectPellet::ObjectPellet(Play3d::Vector3f position) : GameObject(TYPE_PLAYER_PELLET, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\pellet.obj");
-	m_materialId = AssignMaterialHLSL(s_materialId, "..\\Assets\\Shaders\\PlayerPellet.hlsl");
+	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\pellet.obj");
+	m_materialId = GetObjectManager()->GetMaterialHLSL("..\\Assets\\Shaders\\PlayerPellet.hlsl");
 
 	m_collisionRadius = 0.1f;
 }

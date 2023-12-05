@@ -3,9 +3,6 @@
 
 using namespace Play3d;
 
-static Graphics::MeshId s_meshId{};
-static Graphics::MaterialId s_materialId{};
-
 static constexpr float WOBBLE_STRENGTH{kfQuartPi / 4.f};
 static constexpr float POS_LIMIT_X{8.f};
 
@@ -17,8 +14,8 @@ static constexpr float COOLDOWN_FIRE{0.5f};
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
-	m_meshId = AssignMesh(s_meshId, "..\\Assets\\Models\\_station.obj");
-	m_materialId = AssignMaterial(s_materialId, "..\\Assets\\Models\\_station-red.jpg");
+	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\_station.obj");
+	m_materialId = GetObjectManager()->GetMaterial("..\\Assets\\Models\\_station-red.jpg");
 }
 
 void ObjectBoss::Update()

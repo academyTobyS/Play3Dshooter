@@ -12,5 +12,7 @@ public:
 
 private:
 	Play3d::Graphics::MeshId m_meshFullscreen;
+	Play3d::Graphics::MaterialId m_matHud;
+	Play3d::Graphics::MaterialId m_matBackground;
 };
 

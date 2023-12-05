@@ -19,7 +19,9 @@ enum GameObjectType
 	TYPE_BOSS_PELLET,
 
 	// Misc. objects
-	TYPE_ASTEROID
+	TYPE_ASTEROID,
+
+	TYPE_TOTAL
 };
 
 class GameObject

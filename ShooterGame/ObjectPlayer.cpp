@@ -27,8 +27,17 @@ static const Vector2f MAX_POS{9.f, 7.f};
 
 ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position)
 {
-	AssignMesh(m_meshId, "..\\Assets\\Models\\_fighter.obj"); // main mesh
-	AssignMaterial(m_materialId, "..\\Assets\\Models\\_fighter-blue.jpg");
+	GameObjectManager* pObjs{ GetObjectManager() };
+
+	// Load and assign player mesh
+	m_meshId = pObjs->GetMesh("..\\Assets\\Models\\_fighter.obj");
+	m_materialId = GetObjectManager()->GetMaterial("..\\Assets\\Models\\_fighter-blue.jpg");
+
+	// Ensure player chunks are preloaded to avoid lag on first death
+	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-core.obj");
+	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-wingL.obj");
+	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-wingR.obj");
+
 
 	ParticleEmitterSettings s;
 	s.capacity = 100;

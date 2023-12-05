@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "ObjectManager.h"
 #include <fstream>
 
 using namespace Play3d;
@@ -45,7 +46,7 @@ void GameObject::Draw() const
 void GameObject::DrawCollision() const
 {
 	static Graphics::MeshId collMesh = Graphics::CreateSphere(1.f, 6, 6, Colour::Blue);
-	static Graphics::MaterialId collMat = AssignMaterial(collMat);
+	static Graphics::MaterialId collMat = GetObjectManager()->GetMaterial();
 
 	Graphics::SetMaterial(collMat);
 	Graphics::DrawMesh(collMesh, MatrixTranslate<f32>(m_pos.x + m_collisionOffset.x, m_pos.y + m_collisionOffset.y, m_pos.z + m_collisionOffset.z) 
