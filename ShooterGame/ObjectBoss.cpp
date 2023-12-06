@@ -17,9 +17,22 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\_station.obj");
 	m_materialId = GetObjectManager()->GetMaterial("..\\Assets\\Models\\_station-red.jpg");
 
+	// Gateway
 	m_colliders[0].type = CollisionMode::COLL_RECT;
-	m_colliders[0].extents = Vector2f(3.9f, 0.75f);
-	m_colliders[0].offset.x = -1.1f;
+	m_colliders[0].extents = Vector2f(1.5f, 0.75f);
+	m_colliders[0].offset.x = -3.7f;
+
+	// Cannon
+	m_colliders.push_back(CollisionData());
+	m_colliders[1].type = CollisionMode::COLL_RECT;
+	m_colliders[1].extents = Vector2f(.3f, 1.5f);
+	m_colliders[1].offset.y = -1.f;
+
+	// Body
+	m_colliders.push_back(CollisionData());
+	m_colliders[2].type = CollisionMode::COLL_RECT;
+	m_colliders[2].extents = Vector2f(2.5f, 0.3f);
+	m_colliders[2].offset.x = 0.f;
 }
 
 void ObjectBoss::Update()

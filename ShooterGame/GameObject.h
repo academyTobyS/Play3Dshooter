@@ -67,7 +67,6 @@ public:
 	void SetVelocity(Play3d::Vector3f velocity) { m_velocity = velocity; }
 	void SetAcceleration(Play3d::Vector3f acceleration) { m_acceleration = acceleration; }
 	void SetPosition(Play3d::Vector3f pos ) { m_pos = pos; }
-	void SetSprite( std::string spriteName, float animationSpeed );
 	void SetAnimationSpeed( float animationSpeed ) { m_animSpeed = animationSpeed; }
 	void SetRotation( Play3d::Vector3f rotation ) { m_rotation = rotation; }
 	void SetRotationSpeed( Play3d::Vector3f rotationSpeed ) { m_rotSpeed = rotationSpeed; }
