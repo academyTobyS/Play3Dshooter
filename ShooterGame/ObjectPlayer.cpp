@@ -62,7 +62,7 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 
 void ObjectPlayer::Update()
 {
-	if (m_respawnCooldown <= 0.f)
+	if (m_bIsAlive)
 	{
 		HandleControls();
 	}
@@ -97,6 +97,7 @@ void ObjectPlayer::Respawn()
 
 		SetHidden(false);
 		m_canCollide = true;
+		m_bIsAlive = true;
 
 		GameHud::Get()->SetLives(m_lives);
 	}
@@ -288,6 +289,7 @@ void ObjectPlayer::OnCollision(GameObject* other)
 		// Die > if lives remain, start respawn timer, else gameover
 		SetHidden(true);
 		m_canCollide = false;
+		m_bIsAlive = false;
 		m_respawnCooldown = COOLDOWN_RESPAWN;
 
 		GameObjectManager* pObjs{GetObjectManager()};

@@ -15,6 +15,7 @@ public:
 	void Draw() const override;
 
 private:
+	bool m_bIsAlive{true};
 	bool m_bDoubleTapLeft{false};
 	bool m_bDoubleTapRight{false};
 	bool m_bIsBarrelRoll{false};
