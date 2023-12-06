@@ -23,4 +23,6 @@ private:
 	float m_respawnCooldown{0.f};
 	ParticleEmitter m_emitterLeftThruster;
 	ParticleEmitter m_emitterRightThruster;
+
+	int m_lives{3};
 };

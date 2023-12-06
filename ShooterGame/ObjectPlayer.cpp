@@ -55,8 +55,8 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 	m_emitterLeftThruster.ApplySettings(s);
 	m_emitterRightThruster.ApplySettings(s);
 
-	m_collisionRadius = 0.4f;
-	m_collisionOffset.y = -0.1f;
+	m_colliders[0].radius = 0.4f;
+	m_colliders[0].offset.y = -0.1f;
 }
 
 void ObjectPlayer::Update()
@@ -77,21 +77,26 @@ void ObjectPlayer::Update()
 
 void ObjectPlayer::Respawn()
 {
-	m_pos = Vector3f(0.f, -GetGameHalfHeight() / 1.25f, 0.f);
-	m_velocity = Vector3f(0.f, 0.f, 0.f);
-	m_rotation = Vector3f(0.f, 0.f, 0.f);
-	m_bDoubleTapLeft = false;
-	m_bDoubleTapRight = false;
-	m_bIsBarrelRoll = false;
-	m_shootCooldown = 0.f;
-	m_rollCooldown = 0.f;
-	m_respawnCooldown = 0.f;
+	if(m_lives > 0)
+	{
+		m_lives--;
 
-	m_emitterLeftThruster.DestroyAll();
-	m_emitterRightThruster.DestroyAll();
+		m_pos = Vector3f(0.f, -GetGameHalfHeight() / 1.25f, 0.f);
+		m_velocity = Vector3f(0.f, 0.f, 0.f);
+		m_rotation = Vector3f(0.f, 0.f, 0.f);
+		m_bDoubleTapLeft = false;
+		m_bDoubleTapRight = false;
+		m_bIsBarrelRoll = false;
+		m_shootCooldown = 0.f;
+		m_rollCooldown = 0.f;
+		m_respawnCooldown = 0.f;
 
-	SetHidden(false);
-	m_canCollide = true;
+		m_emitterLeftThruster.DestroyAll();
+		m_emitterRightThruster.DestroyAll();
+
+		SetHidden(false);
+		m_canCollide = true;
+	}
 }
 
 void ObjectPlayer::HandleControls()

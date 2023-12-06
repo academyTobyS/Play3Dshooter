@@ -7,7 +7,7 @@ ObjectPellet::ObjectPellet(Play3d::Vector3f position) : GameObject(TYPE_PLAYER_P
 	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\pellet.obj");
 	m_materialId = GetObjectManager()->GetMaterialHLSL("..\\Assets\\Shaders\\PlayerPellet.hlsl");
 
-	m_collisionRadius = 0.1f;
+	m_colliders[0].radius = 0.1f;
 }
 
 void ObjectPellet::Update()
@@ -19,4 +19,12 @@ void ObjectPellet::Update()
 	}
 
 	//if()
+}
+
+void ObjectPellet::OnCollision(GameObject* other)
+{
+	if (other->GetObjectType() == GameObjectType::TYPE_BOSS)
+	{
+		Destroy();
+	}
 }

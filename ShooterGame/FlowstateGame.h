@@ -15,7 +15,7 @@ public:
 private:
 	void SetGameCamera();
 
-	ParticleEmitter m_emitter;
+	ParticleEmitter m_starEmitter;
 	GameHud m_hud;
 	bool m_debugCam{false};
 	bool m_debugCollision{false};

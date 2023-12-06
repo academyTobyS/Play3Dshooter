@@ -36,9 +36,9 @@ void FlowstateGame::EnterState()
 	s.particlesRelativeToEmitter = true;
 	s.particleLifetime = 6.f;
 	s.particlesPerEmit = 4;
-	m_emitter.ApplySettings(s);
-	m_emitter.m_position.y = 10.f;
-	m_emitter.Prewarm();
+	m_starEmitter.ApplySettings(s);
+	m_starEmitter.m_position.y = 10.f;
+	m_starEmitter.Prewarm();
 
 	SetGameCamera();
 }
@@ -92,8 +92,8 @@ eFlowstates FlowstateGame::Update()
 
 	GameObjectManager* pObjs{ GetObjectManager() };
 	pObjs->UpdateAll();
-	m_emitter.Tick();
-	//m_emitter.m_position.x = (pObjs->GetPlayer()->GetPosition().x) * -0.2f;
+	m_starEmitter.Tick();
+	//m_starEmitter.m_position.x = (pObjs->GetPlayer()->GetPosition().x) * -0.2f;
 
 	return eFlowstates::STATE_NULL;
 }
@@ -110,18 +110,17 @@ void FlowstateGame::Draw()
 		UI::DrawPrintf(fontId, Vector2f(20, 50), Colour::Lightblue, "[frame %d, delta=%.2fms elapsed=%.2fs]", frameCounter++, System::GetDeltaTime() * 1000.f, System::GetElapsedTime());
 	}
 
+
+	Graphics::BeginPrimitiveBatch();
 	if (m_debugCollision)
 	{
 		GetObjectManager()->DrawCollisionAll();
 	}
+	GetObjectManager()->DrawAll();
+	m_starEmitter.Draw();
+	Graphics::EndPrimitiveBatch();
 
 	m_hud.Draw();
-
-	// Gameobjects may make use of primitive batch for various purposes
-	Graphics::BeginPrimitiveBatch();
-	GetObjectManager()->DrawAll();
-	m_emitter.Draw();
-	Graphics::EndPrimitiveBatch();
 }
 
 void FlowstateGame::ExitState()

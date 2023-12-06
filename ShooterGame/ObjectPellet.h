@@ -7,6 +7,7 @@ public:
 	ObjectPellet(Play3d::Vector3f position);
 
 	void Update() override;
+	void OnCollision(GameObject* other) override;
 
 private:
 	float m_lifetime{5.f};

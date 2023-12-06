@@ -16,6 +16,10 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 {
 	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\_station.obj");
 	m_materialId = GetObjectManager()->GetMaterial("..\\Assets\\Models\\_station-red.jpg");
+
+	m_colliders[0].type = CollisionMode::COLL_RECT;
+	m_colliders[0].extents = Vector2f(3.9f, 0.75f);
+	m_colliders[0].offset.x = -1.1f;
 }
 
 void ObjectBoss::Update()

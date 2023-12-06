@@ -24,6 +24,20 @@ enum GameObjectType
 	TYPE_TOTAL
 };
 
+enum CollisionMode
+{
+	COLL_RADIAL,
+	COLL_RECT,
+};
+
+struct CollisionData
+{
+	Play3d::Vector2f extents{0.f, 0.f};
+	Play3d::Vector2f offset{0.f, 0.f};
+	float radius{1.f};
+	CollisionMode type{ CollisionMode::COLL_RADIAL };
+};
+
 class GameObject
 {
 public:
@@ -81,8 +95,9 @@ protected:
 
 	Play3d::Vector3f m_rotation{ 0.f, 0.f, 0.f };
 	Play3d::Vector3f m_rotSpeed{ 0.f, 0.f, 0.f };
-	Play3d::Vector3f m_collisionOffset{0.f, 0.f, 0.f};
-	float m_collisionRadius{ 1.f };
+	
+	// Optionally supporting multiple collision bounds per object for complex shapes
+	std::vector<CollisionData> m_colliders;
 
 	float m_frame{ -1 };
 	float m_frameTimer{ 0 };
