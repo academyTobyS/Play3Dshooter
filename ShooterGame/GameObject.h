@@ -17,6 +17,7 @@ enum GameObjectType
 	// Enemy objects
 	TYPE_BOSS,
 	TYPE_BOSS_PELLET,
+	TYPE_BOSS_BOMB,
 
 	// Misc. objects
 	TYPE_ASTEROID,
@@ -57,6 +58,7 @@ public:
 	bool IsDestroyed() { return m_destroy; }
 	bool IsHidden() { return m_hidden; }
 	bool IsColliding(GameObject* obj);
+	bool IsOutsideOrthoView();
 
 	// Standard updates and destruction flagging
 	void StandardMovementUpdate();
@@ -94,6 +96,7 @@ protected:
 
 	Play3d::Vector3f m_rotation{ 0.f, 0.f, 0.f };
 	Play3d::Vector3f m_rotSpeed{ 0.f, 0.f, 0.f };
+	float m_scale{1.f};
 	
 	// Optionally supporting multiple collision bounds per object for complex shapes
 	std::vector<CollisionData> m_colliders;

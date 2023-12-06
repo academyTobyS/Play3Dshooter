@@ -156,6 +156,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectAsteroid.h" />
     <ClInclude Include="ObjectBoss.h" />
+    <ClInclude Include="ObjectBossBomb.h" />
     <ClInclude Include="ObjectBossPellet.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectPellet.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ObjectAsteroid.cpp" />
     <ClCompile Include="ObjectBoss.cpp" />
+    <ClCompile Include="ObjectBossBomb.cpp" />
     <ClCompile Include="ObjectBossPellet.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Main.cpp" />

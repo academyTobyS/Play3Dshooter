@@ -10,7 +10,7 @@ static constexpr float CANNON_SPACING{0.75f};
 static constexpr float CANNON_SHOTSPEED{-0.05f};
 static constexpr int TOTAL_CANNONS{7};
 
-static constexpr float COOLDOWN_FIRE{0.5f};
+static constexpr float COOLDOWN_FIRE{3.5f};
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
@@ -43,15 +43,17 @@ void ObjectBoss::Update()
 	m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
 	m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
 
-	m_fireCooldown -= System::GetDeltaTime();
-	if (m_fireCooldown < 0.f)
+	m_cannonCooldown -= System::GetDeltaTime();
+	if (m_cannonCooldown < 0.f)
 	{
 		GameObjectManager* pObjs{GetObjectManager()};
-		m_fireCooldown = COOLDOWN_FIRE;
+		m_cannonCooldown = COOLDOWN_FIRE;
 		for (int i = 0; i < TOTAL_CANNONS; i++)
 		{
-			FireCannon(i);
+			//FireCannon(i);
 		}
+
+		FireBomb();
 	}
 }
 
@@ -67,6 +69,15 @@ void ObjectBoss::FireCannon(int cannonId, float speed)
 	// Default to CANNON_SHOTSPEED but allow custom speeds
 	float shotSpeed = (speed == 0.f ? CANNON_SHOTSPEED : speed);
 	GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, spawnPos)->SetVelocity(Vector3f(0.f, shotSpeed, 0.f));
+}
+
+void ObjectBoss::FireBomb()
+{
+	Vector3f spawnPos{ m_pos };
+	spawnPos.y -= 1.f;
+	spawnPos.x += 0.38f;
+
+	GetObjectManager()->CreateObject(TYPE_BOSS_BOMB, spawnPos)->SetVelocity(Vector3f(0.f, CANNON_SHOTSPEED, 0.f));
 }
 
 void ObjectBoss::ActivateLaser(int laserId)

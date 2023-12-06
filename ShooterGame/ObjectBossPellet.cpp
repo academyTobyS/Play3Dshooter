@@ -12,7 +12,7 @@ ObjectBossPellet::ObjectBossPellet(Play3d::Vector3f position) : GameObject(TYPE_
 
 void ObjectBossPellet::Update()
 {
-	if(m_pos.y < -2.f)
+	if(IsOutsideOrthoView())
 	{
 		Destroy();
 	}

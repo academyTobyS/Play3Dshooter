@@ -2346,7 +2346,7 @@ namespace Play3d
 		{
 			Graphics::SurfaceSize surfaceSize = Graphics::GetDisplaySurfaceSize();
 			
-			f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(10.f);
+			f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(100.f);
 
 			Matrix4x4f view = MatrixLookatRH(s_demoState.m_eyePosition, s_demoState.m_eyePosition + s_demoState.m_vForward, s_demoState.m_vUp);
 			Matrix4x4f project = MatrixPerspectiveProjectRH(fovY, aspect, nearZ, farZ);

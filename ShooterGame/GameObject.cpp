@@ -93,6 +93,11 @@ bool GameObject::IsColliding( GameObject* obj )
 	return false;
 }
 
+bool GameObject::IsOutsideOrthoView()
+{
+	return (m_pos.x < -GetGameHalfWidth() || m_pos.x > GetGameHalfWidth() || m_pos.y < -GetGameHalfHeight() || m_pos.y > GetGameHalfHeight());
+}
+
 void GameObject::Draw() const
 {
 	Matrix4x4f transform = 

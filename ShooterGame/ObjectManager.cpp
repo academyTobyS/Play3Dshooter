@@ -7,6 +7,7 @@
 #include "ObjectPellet.h"
 #include "ObjectBoss.h"
 #include "ObjectBossPellet.h"
+#include "ObjectBossBomb.h"
 #include "ObjectAsteroid.h"
 
 // A global pointer to a GameObjectManager instance (not delared/visible outside of this compilation unit)
@@ -70,6 +71,10 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 
 	case TYPE_BOSS_PELLET:
 		pNewObj = new ObjectBossPellet(pos);
+		break;
+
+	case TYPE_BOSS_BOMB:
+		pNewObj = new ObjectBossBomb(pos);
 		break;
 
 	case TYPE_ASTEROID:

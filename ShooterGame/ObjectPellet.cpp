@@ -12,13 +12,10 @@ ObjectPellet::ObjectPellet(Play3d::Vector3f position) : GameObject(TYPE_PLAYER_P
 
 void ObjectPellet::Update()
 {
-	m_lifetime -= System::GetDeltaTime();
-	if (m_lifetime < 0)
+	if (IsOutsideOrthoView())
 	{
 		Destroy();
 	}
-
-	//if()
 }
 
 void ObjectPellet::OnCollision(GameObject* other)

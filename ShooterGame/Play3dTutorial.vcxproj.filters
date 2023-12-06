@@ -64,6 +64,7 @@
     <ClInclude Include="ObjectPlayerChunk.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectBossBomb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -113,6 +114,9 @@
     </ClCompile>
     <ClCompile Include="ObjectPlayerChunk.cpp">
       <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBossBomb.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
