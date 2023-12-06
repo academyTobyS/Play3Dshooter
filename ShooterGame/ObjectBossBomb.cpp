@@ -51,7 +51,7 @@ void ObjectBossBomb::Burst()
 		}
 		Vector3f direction{x, y, 0.f};
 
-		pPellet->SetVelocity(direction * 0.1f);
+		pPellet->SetVelocity(direction * 0.05f);
 		pPellet->SetHidden(false);
 	}
 }

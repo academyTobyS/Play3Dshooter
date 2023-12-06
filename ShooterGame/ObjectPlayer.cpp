@@ -1,5 +1,6 @@
 #include "ObjectPlayer.h"
 #include "ObjectManager.h"
+#include "GameHud.h"
 using namespace Play3d;
 
 static constexpr float SHIP_HALFWIDTH{0.15f};
@@ -96,6 +97,8 @@ void ObjectPlayer::Respawn()
 
 		SetHidden(false);
 		m_canCollide = true;
+
+		GameHud::Get()->SetLives(m_lives);
 	}
 }
 

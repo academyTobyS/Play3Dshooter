@@ -104,7 +104,8 @@ void GameObject::Draw() const
 		  MatrixTranslate<f32>(m_pos.x, m_pos.y, m_pos.z)
 		* MatrixRotationX<f32>(m_rotation.x)
 		* MatrixRotationY<f32>(m_rotation.y)
-		* MatrixRotationZ<f32>(m_rotation.z);
+		* MatrixRotationZ<f32>(m_rotation.z)
+		* MatrixScale<f32>(m_scale, m_scale, m_scale);
 
 	Graphics::SetMaterial(m_materialId);
 	Graphics::DrawMesh(m_meshId, transform);

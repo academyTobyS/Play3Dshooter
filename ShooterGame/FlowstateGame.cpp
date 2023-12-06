@@ -2,7 +2,7 @@
 #include "FlowstateGame.h"
 #include "ObjectManager.h"
 #include "UtilityFunctions.h"
-
+#include "GameHud.h"
 using namespace Play3d;
 
 void FlowstateGame::EnterState()
@@ -93,7 +93,6 @@ eFlowstates FlowstateGame::Update()
 	GameObjectManager* pObjs{ GetObjectManager() };
 	pObjs->UpdateAll();
 	m_starEmitter.Tick();
-	//m_starEmitter.m_position.x = (pObjs->GetPlayer()->GetPosition().x) * -0.2f;
 
 	return eFlowstates::STATE_NULL;
 }
@@ -118,12 +117,13 @@ void FlowstateGame::Draw()
 	}
 	GetObjectManager()->DrawAll();
 	m_starEmitter.Draw();
+	GameHud::Get()->Draw();
 	Graphics::EndPrimitiveBatch();
 
-	m_hud.Draw();
 }
 
 void FlowstateGame::ExitState()
 {
 	DestroyObjectManager();
+	GameHud::Destroy();
 }

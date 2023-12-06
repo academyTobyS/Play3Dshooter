@@ -1,5 +1,6 @@
 #include "ObjectBoss.h"
 #include "ObjectManager.h"
+#include "GameHud.h"
 
 using namespace Play3d;
 
@@ -41,7 +42,7 @@ void ObjectBoss::Update()
 
 	m_rotation.x = sin(elapsedTime * 2) * WOBBLE_STRENGTH / 2;
 	m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
-	m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
+	//m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
 
 	m_cannonCooldown -= System::GetDeltaTime();
 	if (m_cannonCooldown < 0.f)
@@ -50,14 +51,14 @@ void ObjectBoss::Update()
 		m_cannonCooldown = COOLDOWN_FIRE;
 		for (int i = 0; i < TOTAL_CANNONS; i++)
 		{
-			//FireCannon(i);
+			//FireSingle(i);
 		}
 
 		FireBomb();
 	}
 }
 
-void ObjectBoss::FireCannon(int cannonId, float speed)
+void ObjectBoss::FireSingle(int cannonId, float speed)
 {
 	PLAY_ASSERT(cannonId < TOTAL_CANNONS);
 	Vector3f spawnPos{ m_pos };
@@ -71,11 +72,20 @@ void ObjectBoss::FireCannon(int cannonId, float speed)
 	GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, spawnPos)->SetVelocity(Vector3f(0.f, shotSpeed, 0.f));
 }
 
+void ObjectBoss::FireBurst(Play3d::Vector2f origin, float velocity, float minAngle, float maxAngle, int segments)
+{
+	GameObjectManager* pObjs{GetObjectManager()};
+	for (int i = 0; i < segments; i++)
+	{
+
+		pObjs->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x, origin.y, 0.f));
+	}
+}
+
 void ObjectBoss::FireBomb()
 {
 	Vector3f spawnPos{ m_pos };
 	spawnPos.y -= 1.f;
-	spawnPos.x += 0.38f;
 
 	GetObjectManager()->CreateObject(TYPE_BOSS_BOMB, spawnPos)->SetVelocity(Vector3f(0.f, CANNON_SHOTSPEED, 0.f));
 }
@@ -88,6 +98,15 @@ void ObjectBoss::ActivateLaser(int laserId)
 void ObjectBoss::DisableLaser(int laserId)
 {
 
+}
+
+void ObjectBoss::OnCollision(GameObject* other)
+{
+	if (other->GetObjectType() == GameObjectType::TYPE_PLAYER_PELLET)
+	{
+		m_health--;
+		GameHud::Get()->SetBossBarPercent((f32)m_health / BOSS_MAX_HEALTH);
+	}
 }
 
 void ObjectBoss::Draw() const
