@@ -26,7 +26,7 @@ bool GameObject::IsColliding( GameObject* obj )
 			{
 				float xDiff = (m_pos.x + m_colliders[iThis].offset.x) - (obj->m_pos.x + obj->m_colliders[iOther].offset.x);
 				float yDiff = (m_pos.y + m_colliders[iThis].offset.y) - (obj->m_pos.y + obj->m_colliders[iOther].offset.y);
-				float radii = m_colliders[iThis].radius + obj->m_colliders[iOther].radius;
+				float radii = (m_colliders[iThis].radius * m_scale) + (obj->m_colliders[iOther].radius * obj->m_scale);
 
 				if ((xDiff * xDiff) + (yDiff * yDiff) < radii * radii)
 				{
@@ -64,13 +64,13 @@ bool GameObject::IsColliding( GameObject* obj )
 				float distanceToRect = length(vecToRect);
 
 				// If distance from RadialCollider to RectCollider is smaller than collision radius, collision must be true
-				if(distanceToRect < objRadial->m_colliders[iRad].radius)
+				if(distanceToRect < (objRadial->m_colliders[iRad].radius * objRadial->m_scale))
 				{
 					return true;
 				}
 				else // Else find point on radius-perimeter nearest to rect and test if that point is within rect
 				{
-					Vector3f testPoint = objRadialPos + ((vecToRect / distanceToRect) * objRadial->m_colliders[iRad].radius);
+					Vector3f testPoint = objRadialPos + ((vecToRect / distanceToRect) * (objRadial->m_colliders[iRad].radius * objRadial->m_scale));
 					if (   testPoint.x < objRectPos.x + objRect->m_colliders[iRect].extents.x
 						&& testPoint.x > objRectPos.x - objRect->m_colliders[iRect].extents.x
 						&& testPoint.y < objRectPos.y + objRect->m_colliders[iRect].extents.y

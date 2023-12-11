@@ -148,6 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AttackPhase.h" />
+    <ClInclude Include="AttackPhaseA.h" />
     <ClInclude Include="Flowstate.h" />
     <ClInclude Include="FlowstateGame.h" />
     <ClInclude Include="FlowstateMachine.h" />
@@ -167,6 +169,8 @@
     <ClInclude Include="UtilityFunctions.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AttackPhase.cpp" />
+    <ClCompile Include="AttackPhaseA.cpp" />
     <ClCompile Include="FlowstateGame.cpp" />
     <ClCompile Include="FlowstateMachine.cpp" />
     <ClCompile Include="FlowstateMenu.cpp" />
