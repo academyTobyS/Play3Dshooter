@@ -16,7 +16,8 @@ ObjectBossBomb::ObjectBossBomb(Play3d::Vector3f position) : GameObject(TYPE_BOSS
 
 void ObjectBossBomb::Update()
 {
-	if (m_pos.y < -2.5f)
+	m_detonationTimer -= Play3d::System::GetDeltaTime();
+	if (m_detonationTimer <= 0.f)
 	{
 		Burst();
 	}

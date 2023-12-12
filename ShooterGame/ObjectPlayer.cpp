@@ -23,6 +23,8 @@ static constexpr float MAX_ROT_Y{kfQuartPi / 4.f};
 
 static constexpr float COOLDOWN_RESPAWN{2.f};
 
+static constexpr float PLAYER_INVINCIBILITY_TIME{1.5f};
+
 static const Vector2f MIN_POS{-9.f, -7.f};
 static const Vector2f MAX_POS{9.f, 7.f};
 
@@ -62,6 +64,8 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 
 void ObjectPlayer::Update()
 {
+	m_invincibilityTimer -= Play3d::System::GetDeltaTime();
+
 	if (m_bIsAlive)
 	{
 		HandleControls();
@@ -98,6 +102,8 @@ void ObjectPlayer::Respawn()
 		SetHidden(false);
 		m_canCollide = true;
 		m_bIsAlive = true;
+
+		m_invincibilityTimer = PLAYER_INVINCIBILITY_TIME;
 
 		GameHud::Get()->SetLives(m_lives);
 	}
@@ -284,6 +290,11 @@ void ObjectPlayer::HandleControls()
 
 void ObjectPlayer::OnCollision(GameObject* other)
 {
+	if (m_invincibilityTimer >= 0.f)
+	{
+		return;
+	}
+
 	if(other->GetObjectType() == GameObjectType::TYPE_BOSS_PELLET || other->GetObjectType() == GameObjectType::TYPE_BOSS)
 	{
 		// Die > if lives remain, start respawn timer, else gameover

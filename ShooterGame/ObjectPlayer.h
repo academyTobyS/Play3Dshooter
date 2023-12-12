@@ -15,6 +15,8 @@ public:
 	void Draw() const override;
 
 private:
+	float m_invincibilityTimer{0.f};
+
 	bool m_bIsAlive{true};
 	bool m_bDoubleTapLeft{false};
 	bool m_bDoubleTapRight{false};

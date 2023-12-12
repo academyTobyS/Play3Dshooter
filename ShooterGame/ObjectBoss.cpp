@@ -2,7 +2,9 @@
 #include "ObjectManager.h"
 #include "GameHud.h"
 
+#include "ObjectBossBomb.h"
 #include "AttackPhaseA.h"
+#include "AttackPhaseB.h"
 
 using namespace Play3d;
 
@@ -14,6 +16,7 @@ static constexpr int TOTAL_CANNONS{7};
 static constexpr float COOLDOWN_FIRE{3.5f};
 
 AttackPhaseA patternA;
+AttackPhaseB patternB;
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
@@ -39,6 +42,8 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 
 	// Setup attack patterns
 	RegisterAttackPattern(&patternA, eAttackPhase::PHASE_A);
+	RegisterAttackPattern(&patternB, eAttackPhase::PHASE_B);
+	m_phase = eAttackPhase::PHASE_B;
 	m_phases[m_phase]->Start(this);
 }
 
@@ -49,12 +54,18 @@ void ObjectBoss::ActivateAttackPattern(eAttackPhase newPhase)
 	m_phase = newPhase;
 }
 
-void ObjectBoss::ToggleAutocannon(bool enabled, float interval)
+void ObjectBoss::ToggleAutocannon(bool enabled, float interval, int groupSize, float groupDelay)
 {
 	if (enabled != m_autocannonActive || interval != m_autocannonInterval)
 	{
+		// Apply settings
 		m_autocannonActive = enabled;
 		m_autocannonInterval = interval;
+		m_autocannonGroupsize = groupSize;
+		m_autocannonGroupdelay = groupDelay;
+
+		// Reset
+		m_autocannonCounter = 0;
 		m_autocannonTimer = 0.f;
 	}
 }
@@ -63,22 +74,52 @@ void ObjectBoss::Update()
 {
 	// ship wobble anim
 	float elapsedTime = System::GetElapsedTime();
+	//m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
 	m_rotation.x = sin(elapsedTime * 2) * WOBBLE_STRENGTH / 2;
 	m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
-	//m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
 
-	// Execute registered attack patterns
+	// Execute active attack pattern
 	m_phases[m_phase]->Update(this);
 
 	// Fire autocannon when enabled
 	if (m_autocannonActive)
 	{
-		m_autocannonTimer += Play3d::System::GetDeltaTime();
-		if (m_autocannonTimer >= m_autocannonInterval)
+		UpdateAutocannon();
+	}
+
+	// Process multishot requests (similar to autocannon except without endless loop)
+	if (m_multishotRemaining)
+	{
+		UpdateMultishot();
+	}
+}
+
+void ObjectBoss::UpdateAutocannon()
+{
+	m_autocannonTimer -= Play3d::System::GetDeltaTime();
+	if (m_autocannonTimer <= 0.f)
+	{
+		FireAtPlayer();
+
+		m_autocannonTimer = m_autocannonInterval;
+		m_autocannonCounter++;
+		if (m_autocannonCounter >= m_autocannonGroupsize)
 		{
-			m_autocannonTimer = 0.f;
-			FireAtPlayer();
+			m_autocannonCounter = 0;
+			m_autocannonTimer = m_autocannonGroupdelay;
 		}
+	}
+}
+
+void ObjectBoss::UpdateMultishot()
+{
+	m_multishotTimer -= Play3d::System::GetDeltaTime();
+	if (m_multishotTimer <= 0.f)
+	{
+		FireAtPlayer();
+
+		m_multishotRemaining--;
+		m_multishotTimer = m_multishotDelay;
 	}
 }
 
@@ -89,6 +130,13 @@ void ObjectBoss::FireAtPlayer(Play3d::Vector2f origin, float velocity)
 
 	GameObject* pObj = GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x, origin.y, 0.f));
 	pObj->SetVelocity(normalize(pObj->GetPosition() - GetObjectManager()->GetPlayer()->GetPosition()) * velocity);
+}
+
+void ObjectBoss::FireAtPlayerMulti(int shotTotal, float delayPerShot)
+{
+	m_multishotRemaining = shotTotal;
+	m_multishotDelay = delayPerShot;
+	m_multishotTimer = 0.f; // ensure first shot is immediate for responsiveness/timings
 }
 
 void ObjectBoss::FireSingle(int spacingIncrement, float angle, float velocity)
@@ -129,12 +177,14 @@ void ObjectBoss::FireBurstBlock(float minX, float maxX, int segments, float velo
 	}
 }
 
-void ObjectBoss::FireBomb()
+void ObjectBoss::FireBomb(float detonationTimer, float angle, float velocity)
 {
 	Vector3f spawnPos{ m_pos };
 	spawnPos.y -= 1.f;
 
-	GetObjectManager()->CreateObject(TYPE_BOSS_BOMB, spawnPos)->SetVelocity(Vector3f(0.f, CANNON_SHOTSPEED, 0.f));
+	ObjectBossBomb* pBomb = static_cast<ObjectBossBomb*>(GetObjectManager()->CreateObject(TYPE_BOSS_BOMB, spawnPos));
+	pBomb->SetVelocity(Vector3f(sin(angle), cos(angle), 0.f) * (velocity == 0.f ? CANNON_SHOTSPEED : velocity));
+	pBomb->SetDetonationTimer(detonationTimer);
 }
 
 void ObjectBoss::ActivateLaser(int laserId)

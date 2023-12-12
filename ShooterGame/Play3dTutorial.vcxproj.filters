@@ -67,12 +67,17 @@
     <ClInclude Include="ObjectPlayerChunk.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectBossBomb.h" />
     <ClInclude Include="AttackPhase.h">
       <Filter>BossAttackPatterns</Filter>
     </ClInclude>
     <ClInclude Include="AttackPhaseA.h">
       <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackPhaseB.h">
+      <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBossBomb.h">
+      <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,14 +129,17 @@
     <ClCompile Include="ObjectPlayerChunk.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectBossBomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AttackPhaseA.cpp">
       <Filter>BossAttackPatterns</Filter>
     </ClCompile>
     <ClCompile Include="AttackPhase.cpp">
       <Filter>BossAttackPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPhaseB.cpp">
+      <Filter>BossAttackPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBossBomb.cpp">
+      <Filter>GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
