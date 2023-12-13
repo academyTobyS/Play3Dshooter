@@ -41,6 +41,10 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-wingL.obj");
 	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-wingR.obj");
 
+	m_sfxDeath[0] = pObjs->GetAudioId("..\\Assets\\Audio\\Death1.wav");
+	m_sfxDeath[1] = pObjs->GetAudioId("..\\Assets\\Audio\\Death2.wav");
+	m_sfxDeath[2] = pObjs->GetAudioId("..\\Assets\\Audio\\Death3.wav");
+
 	ParticleEmitterSettings s;
 	s.capacity = 100;
 	s.emitterMinExtents = Vector3f(-0.05f, 0.f, -0.f);
@@ -331,6 +335,9 @@ void ObjectPlayer::OnCollision(GameObject* other)
 		pChunk = pObjs->CreateObject(TYPE_PLAYER_CHUNK_WING_R, m_pos);
 		pChunk->SetVelocity((m_velocity / 8.f) + Vector3f(-0.01f, -0.01f, 0.f));
 		pChunk->SetRotationSpeed(-m_rotation / 8.f);
+
+		int sfxId = std::floor(RandValueInRange(0.f, SFX_DEATH_SLOTS));
+		Audio::PlaySound(m_sfxDeath[sfxId]);
 	}
 }
 

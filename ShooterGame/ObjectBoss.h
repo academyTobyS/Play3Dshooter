@@ -4,6 +4,9 @@
 
 static constexpr int BOSS_MAX_HEALTH{1000};
 
+static constexpr int SFX_PELLET_SLOTS{3};	// 3 unique audio for firing pellet
+static constexpr int SFX_BOMB_SLOTS{1};		// 2 unique audio for firing bomb
+
 class ObjectBoss : public GameObject
 {
 public:
@@ -29,6 +32,11 @@ public:
 	void ActivateLaser(int laserId);
 	void DisableLaser(int laserId);
 
+	// Randomised Audio
+	void AudioPellet();
+	void AudioBomb();
+	void AudioDamage();
+
 private:
 	void UpdateAutocannon();
 	void UpdateMultishot();
@@ -37,6 +45,10 @@ private:
 	AttackPatternBase* m_phases[PHASE_TOTAL];
 	eAttackPhase m_phase{PHASE_A};
 	int m_health{ BOSS_MAX_HEALTH };
+
+	// Audio Data
+	Play3d::Audio::SoundId m_sfxFirePellet[SFX_PELLET_SLOTS]; 
+	Play3d::Audio::SoundId m_sfxFireBomb[SFX_BOMB_SLOTS];
 
 	// Aimed MultiShot
 	int m_multishotRemaining{0};

@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "ParticleEmitter.h"
 
+static constexpr int SFX_DEATH_SLOTS{3};
+
 class ObjectPlayer : public GameObject
 {
 public:
@@ -15,6 +17,8 @@ public:
 	void Draw() const override;
 
 private:
+	Play3d::Audio::SoundId m_sfxDeath[SFX_DEATH_SLOTS];
+
 	bool m_bIsAlive{true};
 	bool m_bDoubleTapLeft{false};
 	bool m_bDoubleTapRight{false};

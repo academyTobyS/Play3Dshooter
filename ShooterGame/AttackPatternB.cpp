@@ -9,7 +9,7 @@ AttackPatternB::AttackPatternB()
 	{
 		pBoss->FireAtPlayerMulti(16, 0.1f);
 	},
-	0.f);
+	0.5f);
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
@@ -33,7 +33,7 @@ AttackPatternB::AttackPatternB()
 	{
 		pBoss->FireAtPlayerMulti(16, 0.1f);
 	},
-	0.f);
+	0.5f);
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{

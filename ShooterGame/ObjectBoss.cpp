@@ -20,8 +20,14 @@ AttackPatternB patternB;
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
-	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\_station.obj");
-	m_materialId = GetObjectManager()->GetMaterial("..\\Assets\\Models\\_station-red.jpg");
+	// Get resources
+	GameObjectManager* pObj{GetObjectManager()};
+	m_meshId = pObj->GetMesh("..\\Assets\\Models\\_station.obj");
+	m_materialId = pObj->GetMaterial("..\\Assets\\Models\\_station-red.jpg");
+	m_sfxFirePellet[0] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet1.wav");
+	m_sfxFirePellet[1] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet2.wav");
+	m_sfxFirePellet[2] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet3.wav");
+	m_sfxFireBomb[0] = pObj->GetAudioId("..\\Assets\\Audio\\BossBomb1.wav");
 
 	// Gateway
 	m_colliders[0].type = CollisionMode::COLL_RECT;
@@ -125,11 +131,17 @@ void ObjectBoss::UpdateMultishot()
 
 void ObjectBoss::FireAtPlayer(Play3d::Vector2f origin, float velocity)
 {
-	origin = (origin == Vector2f(0.f, 0.f) ? m_pos.xy() : origin);
+	if (origin == Vector2f(0.f, 0.f))
+	{
+		origin = m_pos.xy();
+		origin.y -= 2.5f;
+	}
 	velocity = (velocity == 0.f ? CANNON_SHOTSPEED : velocity);
 
 	GameObject* pObj = GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x, origin.y, 0.f));
 	pObj->SetVelocity(normalize(pObj->GetPosition() - GetObjectManager()->GetPlayer()->GetPosition()) * velocity);
+
+	AudioPellet();
 }
 
 void ObjectBoss::FireAtPlayerMulti(int shotTotal, float delayPerShot)
@@ -180,12 +192,14 @@ void ObjectBoss::FireBurstBlock(float minX, float maxX, int segments, float velo
 void ObjectBoss::FireBomb(float detonationTimer, int fragments, float angle, float velocity)
 {
 	Vector3f spawnPos{ m_pos };
-	spawnPos.y -= 1.f;
+	spawnPos.y -= 2.5f;
 
 	ObjectBossBomb* pBomb = static_cast<ObjectBossBomb*>(GetObjectManager()->CreateObject(TYPE_BOSS_BOMB, spawnPos));
 	pBomb->SetVelocity(Vector3f(sin(angle), cos(angle), 0.f) * (velocity == 0.f ? CANNON_SHOTSPEED : velocity));
 	pBomb->SetDetonationTimer(detonationTimer);
 	pBomb->SetFragments(fragments);
+
+	AudioBomb();
 }
 
 void ObjectBoss::ActivateLaser(int laserId)
@@ -196,6 +210,18 @@ void ObjectBoss::ActivateLaser(int laserId)
 void ObjectBoss::DisableLaser(int laserId)
 {
 
+}
+
+void ObjectBoss::AudioPellet()
+{
+	int sfxId = std::floor(RandValueInRange(0.f, SFX_PELLET_SLOTS));
+	Audio::PlaySound(m_sfxFirePellet[sfxId]);
+}
+
+void ObjectBoss::AudioBomb()
+{
+	int sfxId = std::floor(RandValueInRange(0.f, SFX_BOMB_SLOTS));
+	Audio::PlaySound(m_sfxFireBomb[sfxId]);
 }
 
 void ObjectBoss::OnCollision(GameObject* other)

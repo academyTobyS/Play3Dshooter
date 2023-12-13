@@ -54,4 +54,6 @@ void ObjectBossBomb::Burst()
 		pPellet->SetVelocity(direction * 0.05f);
 		pPellet->SetHidden(false);
 	}
+
+	Audio::PlaySound(GetObjectManager()->GetAudioId("..\\Assets\\Audio\\BombExplode.wav"));
 }

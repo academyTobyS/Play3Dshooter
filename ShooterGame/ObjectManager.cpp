@@ -101,6 +101,18 @@ Play3d::Graphics::MeshId GameObjectManager::GetMesh(const char* filepath)
 	return m_meshRegister.at(filepath);
 }
 
+Play3d::Audio::SoundId GameObjectManager::GetAudioId(const char* filepath)
+{
+	if (m_audioRegister.count(filepath) == 0)
+	{
+		m_audioRegister.insert(std::pair<const char*, Play3d::Audio::SoundId>(
+			filepath,
+			Play3d::Audio::LoadSoundFromFile(filepath)
+		));
+	}
+	return m_audioRegister.at(filepath);
+}
+
 Play3d::Graphics::MaterialId GameObjectManager::GetMaterial(const char* filepath)
 {
 	if (m_materialRegister.count(filepath) == 0)
