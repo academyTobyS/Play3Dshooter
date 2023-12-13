@@ -67,13 +67,13 @@
     <ClInclude Include="ObjectPlayerChunk.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="AttackPhase.h">
+    <ClInclude Include="AttackPatternBase.h">
       <Filter>BossAttackPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="AttackPhaseA.h">
+    <ClInclude Include="AttackPatternA.h">
       <Filter>BossAttackPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="AttackPhaseB.h">
+    <ClInclude Include="AttackPatternB.h">
       <Filter>BossAttackPatterns</Filter>
     </ClInclude>
     <ClInclude Include="ObjectBossBomb.h">
@@ -129,13 +129,13 @@
     <ClCompile Include="ObjectPlayerChunk.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="AttackPhaseA.cpp">
+    <ClCompile Include="AttackPatternA.cpp">
       <Filter>BossAttackPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="AttackPhase.cpp">
+    <ClCompile Include="AttackPatternBase.cpp">
       <Filter>BossAttackPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="AttackPhaseB.cpp">
+    <ClCompile Include="AttackPatternB.cpp">
       <Filter>BossAttackPatterns</Filter>
     </ClCompile>
     <ClCompile Include="ObjectBossBomb.cpp">

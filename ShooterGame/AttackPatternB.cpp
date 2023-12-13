@@ -1,9 +1,9 @@
-#include "AttackPhaseB.h"
+#include "AttackPatternB.h"
 #include "ObjectBoss.h"
 
 using namespace Play3d;
 
-AttackPhaseB::AttackPhaseB()
+AttackPatternB::AttackPatternB()
 {
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
@@ -13,19 +13,19 @@ AttackPhaseB::AttackPhaseB()
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
-		pBoss->FireBomb(2.f, kfQuartPi);
+		pBoss->FireBomb(2.f, 8, kfQuartPi);
 	},
 	2.f);
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
-		pBoss->FireBomb(2.f, 0.f);
+		pBoss->FireBomb(2.f, 8, 0.f);
 	},
 	0.5f);
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
-		pBoss->FireBomb(2.f, -kfQuartPi);
+		pBoss->FireBomb(2.f, 8, -kfQuartPi);
 	},
 	0.5f);
 
@@ -37,29 +37,29 @@ AttackPhaseB::AttackPhaseB()
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
-		pBoss->FireBomb(2.f, -kfQuartPi);
+		pBoss->FireBomb(2.f, 8, -kfQuartPi);
 	},
 	2.f);
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
-		pBoss->FireBomb(2.f, 0.f);
+		pBoss->FireBomb(2.f, 8, 0.f);
 	},
 	0.5f);
 
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
-		pBoss->FireBomb(2.f, kfQuartPi);
+		pBoss->FireBomb(2.f,8,  kfQuartPi);
 	},
 	0.5f);
 }
 
-void AttackPhaseB::Start(ObjectBoss* pBoss)
+void AttackPatternB::Start(ObjectBoss* pBoss)
 {
 	//pBoss->ToggleAutocannon(true);
 }
 
-void AttackPhaseB::End(ObjectBoss* pBoss)
+void AttackPatternB::End(ObjectBoss* pBoss)
 {
 	//pBoss->ToggleAutocannon(false);
 }

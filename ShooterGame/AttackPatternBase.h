@@ -13,7 +13,7 @@ enum eAttackPhase
 using AttackPointer = void (*)(ObjectBoss*);
 using TimedAttack = std::pair<float, AttackPointer>;
 
-class AttackPattern
+class AttackPatternBase
 {
 public:
 	virtual void Start(ObjectBoss* pBoss) {};

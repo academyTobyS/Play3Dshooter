@@ -41,7 +41,6 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-wingL.obj");
 	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-wingR.obj");
 
-
 	ParticleEmitterSettings s;
 	s.capacity = 100;
 	s.emitterMinExtents = Vector3f(-0.05f, 0.f, -0.f);
@@ -128,6 +127,21 @@ void ObjectPlayer::HandleControls()
 	else
 	{
 		m_shootCooldown = 0.f; // allow rapid-fire when spamming shoot button
+	}
+
+	// BOMB
+	if (Input::IsKeyPressed(VK_SHIFT) && m_bombs >= 1)
+	{
+		m_bombs--;
+		GameHud::Get()->SetBombs(m_bombs);
+
+		std::vector<GameObject*> pProjectiles;
+		GetObjectManager()->GetAllObjectsOfType(TYPE_BOSS_PELLET, pProjectiles);
+		GetObjectManager()->GetAllObjectsOfType(TYPE_BOSS_BOMB, pProjectiles, false); // false => results will append to vector
+		for (int i = 0; i < pProjectiles.size(); i++)
+		{
+			pProjectiles[i]->Destroy();
+		}
 	}
 
 	// STEER - VERTICAL

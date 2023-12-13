@@ -1,7 +1,7 @@
-#include "AttackPhase.h"
+#include "AttackPatternBase.h"
 #include "Play3d.h"
 
-void AttackPattern::Update(ObjectBoss* pBoss)
+void AttackPatternBase::Update(ObjectBoss* pBoss)
 {
 	// Process registered attacks based on their relative timing data
 	if (m_vAttacks[m_attackIndex].first < m_timer)
@@ -29,7 +29,7 @@ void AttackPattern::Update(ObjectBoss* pBoss)
 	m_timer += Play3d::System::GetDeltaTime();
 }
 
-void AttackPattern::RegisterAttack(AttackPointer attack, float delaySincePrev)
+void AttackPatternBase::RegisterAttack(AttackPointer attack, float delaySincePrev)
 {
 	m_vAttacks.push_back(TimedAttack(delaySincePrev, attack));
 }

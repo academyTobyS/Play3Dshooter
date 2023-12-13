@@ -2,9 +2,6 @@
 #include "ObjectManager.h"
 using namespace Play3d;
 
-static constexpr int BURST_TOTAL{12};
-static constexpr float ROT_INCREMENT{kfTwoPi / BURST_TOTAL};
-
 ObjectBossBomb::ObjectBossBomb(Play3d::Vector3f position) : GameObject(TYPE_BOSS_PELLET, position)
 {
 	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\pelletEnemy.obj");
@@ -35,13 +32,15 @@ void ObjectBossBomb::Burst()
 {
 	Destroy();
 
+	float rotIncrement{kfTwoPi / m_fragmentTotal};
+
 	GameObjectManager* pObjs{GetObjectManager()};
-	for (int i = 0; i < BURST_TOTAL; i++)
+	for (int i = 0; i < m_fragmentTotal; i++)
 	{
 		GameObject* pPellet = pObjs->CreateObject(TYPE_BOSS_PELLET, m_pos);
 
-		float x = sin(i * ROT_INCREMENT);
-		float y = cos(i * ROT_INCREMENT);
+		float x = sin(i * rotIncrement);
+		float y = cos(i * rotIncrement);
 		if (fabs(y) < std::numeric_limits<float>::epsilon())
 		{
 			y = 0.f;

@@ -148,9 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AttackPhase.h" />
-    <ClInclude Include="AttackPhaseA.h" />
-    <ClInclude Include="AttackPhaseB.h" />
+    <ClInclude Include="AttackPatternBase.h" />
+    <ClInclude Include="AttackPatternA.h" />
+    <ClInclude Include="AttackPatternB.h" />
     <ClInclude Include="Flowstate.h" />
     <ClInclude Include="FlowstateGame.h" />
     <ClInclude Include="FlowstateMachine.h" />
@@ -170,9 +170,9 @@
     <ClInclude Include="UtilityFunctions.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AttackPhase.cpp" />
-    <ClCompile Include="AttackPhaseA.cpp" />
-    <ClCompile Include="AttackPhaseB.cpp" />
+    <ClCompile Include="AttackPatternBase.cpp" />
+    <ClCompile Include="AttackPatternA.cpp" />
+    <ClCompile Include="AttackPatternB.cpp" />
     <ClCompile Include="FlowstateGame.cpp" />
     <ClCompile Include="FlowstateMachine.cpp" />
     <ClCompile Include="FlowstateMenu.cpp" />

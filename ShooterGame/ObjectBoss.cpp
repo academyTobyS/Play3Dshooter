@@ -3,8 +3,8 @@
 #include "GameHud.h"
 
 #include "ObjectBossBomb.h"
-#include "AttackPhaseA.h"
-#include "AttackPhaseB.h"
+#include "AttackPatternA.h"
+#include "AttackPatternB.h"
 
 using namespace Play3d;
 
@@ -15,8 +15,8 @@ static constexpr float CANNON_SHOTSPEED{-0.05f};
 static constexpr int TOTAL_CANNONS{7};
 static constexpr float COOLDOWN_FIRE{3.5f};
 
-AttackPhaseA patternA;
-AttackPhaseB patternB;
+AttackPatternA patternA;
+AttackPatternB patternB;
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
@@ -177,7 +177,7 @@ void ObjectBoss::FireBurstBlock(float minX, float maxX, int segments, float velo
 	}
 }
 
-void ObjectBoss::FireBomb(float detonationTimer, float angle, float velocity)
+void ObjectBoss::FireBomb(float detonationTimer, int fragments, float angle, float velocity)
 {
 	Vector3f spawnPos{ m_pos };
 	spawnPos.y -= 1.f;
@@ -185,6 +185,7 @@ void ObjectBoss::FireBomb(float detonationTimer, float angle, float velocity)
 	ObjectBossBomb* pBomb = static_cast<ObjectBossBomb*>(GetObjectManager()->CreateObject(TYPE_BOSS_BOMB, spawnPos));
 	pBomb->SetVelocity(Vector3f(sin(angle), cos(angle), 0.f) * (velocity == 0.f ? CANNON_SHOTSPEED : velocity));
 	pBomb->SetDetonationTimer(detonationTimer);
+	pBomb->SetFragments(fragments);
 }
 
 void ObjectBoss::ActivateLaser(int laserId)

@@ -1,9 +1,9 @@
-#include "AttackPhaseA.h"
+#include "AttackPatternA.h"
 #include "ObjectBoss.h"
 
 using namespace Play3d;
 
-AttackPhaseA::AttackPhaseA()
+AttackPatternA::AttackPatternA()
 {
 	RegisterAttack([](ObjectBoss* pBoss) -> void
 	{
@@ -19,12 +19,12 @@ AttackPhaseA::AttackPhaseA()
 	.8f);
 }
 
-void AttackPhaseA::Start(ObjectBoss* pBoss)
+void AttackPatternA::Start(ObjectBoss* pBoss)
 {
 	//pBoss->ToggleAutocannon(true);
 }
 
-void AttackPhaseA::End(ObjectBoss* pBoss)
+void AttackPatternA::End(ObjectBoss* pBoss)
 {
 	//pBoss->ToggleAutocannon(false);
 }

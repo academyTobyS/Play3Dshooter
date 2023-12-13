@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "AttackPhase.h"
+#include "AttackPatternBase.h"
 
 static constexpr int BOSS_MAX_HEALTH{1000};
 
@@ -10,7 +10,7 @@ public:
 	ObjectBoss(Play3d::Vector3f position);
 
 	// General
-	void RegisterAttackPattern(AttackPattern* pPhase, eAttackPhase type){m_phases[type] = pPhase; };
+	void RegisterAttackPattern(AttackPatternBase* pPhase, eAttackPhase type){m_phases[type] = pPhase; };
 	void ActivateAttackPattern(eAttackPhase pattern);
 	void Update() override;
 	void Draw() const override;
@@ -22,7 +22,7 @@ public:
 	void FireSingle(int spacingIncrement, float angle, float velocity = 0.f);
 	void FireBurstRadial(float minAngle, float maxAngle, int segments, float velocity = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f));
 	void FireBurstBlock(float minX, float maxX, int segments, float velocity = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f));
-	void FireBomb(float detonationTimer, float angle = 0.f, float velocity = -0.f);
+	void FireBomb(float detonationTimer, int fragments = 12, float angle = 0.f, float velocity = -0.f);
 
 	// Weapon Toggles
 	void ToggleAutocannon(bool enabled, float interval = 0.2f, int groupSize = 8, float groupDelay = 1.5f);
@@ -34,7 +34,7 @@ private:
 	void UpdateMultishot();
 
 	// Boss Data
-	AttackPattern* m_phases[PHASE_TOTAL];
+	AttackPatternBase* m_phases[PHASE_TOTAL];
 	eAttackPhase m_phase{PHASE_A};
 	int m_health{ BOSS_MAX_HEALTH };
 
