@@ -5,6 +5,10 @@
 #include "ObjectBossBomb.h"
 #include "AttackPatternA.h"
 #include "AttackPatternB.h"
+#include "AttackPatternC.h"
+#include "AttackPatternD.h"
+#include "AttackPatternE.h"
+#include "AttackPatternF.h"
 
 using namespace Play3d;
 
@@ -15,8 +19,12 @@ static constexpr float CANNON_SHOTSPEED{-0.05f};
 static constexpr int TOTAL_CANNONS{7};
 static constexpr float COOLDOWN_FIRE{3.5f};
 
-AttackPatternA patternA;
-AttackPatternB patternB;
+AttackPatternA patternRadialBursts;
+AttackPatternB patternTripleBomb;
+AttackPatternC patternPachinko;
+AttackPatternD patternTripleLaser;
+AttackPatternE patternBombShower;
+AttackPatternF patternBlockDivider;
 
 ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, position)
 {
@@ -28,6 +36,7 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 	m_sfxFirePellet[1] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet2.wav");
 	m_sfxFirePellet[2] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet3.wav");
 	m_sfxFireBomb[0] = pObj->GetAudioId("..\\Assets\\Audio\\BossBomb1.wav");
+	m_vMultishotRequests.reserve(4);
 
 	// Gateway
 	m_colliders[0].type = CollisionMode::COLL_RECT;
@@ -47,9 +56,13 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 	m_colliders[2].offset.x = 0.f;
 
 	// Setup attack patterns
-	RegisterAttackPattern(&patternA, eAttackPhase::PHASE_A);
-	RegisterAttackPattern(&patternB, eAttackPhase::PHASE_B);
-	m_phase = eAttackPhase::PHASE_B;
+	RegisterAttackPattern(&patternRadialBursts, eAttackPhase::PHASE_A);
+	RegisterAttackPattern(&patternTripleBomb, eAttackPhase::PHASE_B);
+	RegisterAttackPattern(&patternBombShower, eAttackPhase::PHASE_C);
+	RegisterAttackPattern(&patternPachinko, eAttackPhase::PHASE_D);
+	RegisterAttackPattern(&patternTripleLaser, eAttackPhase::PHASE_E);
+	RegisterAttackPattern(&patternBlockDivider, eAttackPhase::PHASE_F);
+	m_phase = eAttackPhase::PHASE_A;
 	m_phases[m_phase]->Start(this);
 }
 
@@ -84,19 +97,33 @@ void ObjectBoss::Update()
 	m_rotation.x = sin(elapsedTime * 2) * WOBBLE_STRENGTH / 2;
 	m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
 
-	// Execute active attack pattern
-	m_phases[m_phase]->Update(this);
+	UpdateAttackPattern();
 
-	// Fire autocannon when enabled
+	// Process multishot requests (similar to autocannon except without endless loop)
+	UpdateMultishot();
+	
+	// Fire autocannon whenever active
 	if (m_autocannonActive)
 	{
 		UpdateAutocannon();
 	}
 
-	// Process multishot requests (similar to autocannon except without endless loop)
-	if (m_multishotRemaining)
+}
+
+void ObjectBoss::UpdateAttackPattern()
+{
+	// Execute active attack pattern
+	m_phases[m_phase]->Update(this);
+
+	if (m_phases[m_phase]->PatternCanFinish())
 	{
-		UpdateMultishot();
+		int nextPattern = m_phase + 1;
+		if (nextPattern >= eAttackPhase::PHASE_TOTAL)
+		{
+			nextPattern = eAttackPhase::PHASE_A;
+		}
+
+		ActivateAttackPattern(static_cast<eAttackPhase>(nextPattern));
 	}
 }
 
@@ -119,17 +146,26 @@ void ObjectBoss::UpdateAutocannon()
 
 void ObjectBoss::UpdateMultishot()
 {
-	m_multishotTimer -= Play3d::System::GetDeltaTime();
-	if (m_multishotTimer <= 0.f)
+	for (int i = m_vMultishotRequests.size() - 1; i >= 0; i--)
 	{
-		FireAtPlayer();
+		MultishotRequest& r{m_vMultishotRequests[i]};
 
-		m_multishotRemaining--;
-		m_multishotTimer = m_multishotDelay;
+		r.timer -= Play3d::System::GetDeltaTime();
+		if (r.timer <= 0.f)
+		{
+			FireAtPlayer(r.angleOffset);
+			r.timer = r.delayPerShot;
+			r.pendingShots--;
+
+			if (r.pendingShots <= 0)
+			{
+				m_vMultishotRequests.erase(m_vMultishotRequests.begin() + i);
+			}
+		}
 	}
 }
 
-void ObjectBoss::FireAtPlayer(Play3d::Vector2f origin, float velocity)
+void ObjectBoss::FireAtPlayer(float angleOffset, Play3d::Vector2f origin, float velocity)
 {
 	if (origin == Vector2f(0.f, 0.f))
 	{
@@ -138,17 +174,25 @@ void ObjectBoss::FireAtPlayer(Play3d::Vector2f origin, float velocity)
 	}
 	velocity = (velocity == 0.f ? CANNON_SHOTSPEED : velocity);
 
+
 	GameObject* pObj = GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x, origin.y, 0.f));
-	pObj->SetVelocity(normalize(pObj->GetPosition() - GetObjectManager()->GetPlayer()->GetPosition()) * velocity);
+
+	Vector2f vecToPlayer = normalize(pObj->GetPosition().xy() - GetObjectManager()->GetPlayer()->GetPosition().xy());
+	float angle = atan2(vecToPlayer.x, vecToPlayer.y) + angleOffset;
+
+	pObj->SetVelocity(Vector3f(sin(angle), cos(angle), 0.f) * velocity);
 
 	AudioPellet();
 }
 
-void ObjectBoss::FireAtPlayerMulti(int shotTotal, float delayPerShot)
+void ObjectBoss::FireAtPlayerMulti(int shotTotal, float delayPerShot, float angleOffset)
 {
-	m_multishotRemaining = shotTotal;
-	m_multishotDelay = delayPerShot;
-	m_multishotTimer = 0.f; // ensure first shot is immediate for responsiveness/timings
+	m_vMultishotRequests.push_back(MultishotRequest());
+	MultishotRequest& r = m_vMultishotRequests.back();
+
+	r.pendingShots = shotTotal;
+	r.delayPerShot = delayPerShot;
+	r.angleOffset = angleOffset;
 }
 
 void ObjectBoss::FireSingle(int spacingIncrement, float angle, float velocity)
@@ -176,16 +220,17 @@ void ObjectBoss::FireBurstRadial(float minAngle, float maxAngle, int segments, f
 	}
 }
 
-void ObjectBoss::FireBurstBlock(float minX, float maxX, int segments, float velocity, Play3d::Vector2f origin)
+void ObjectBoss::FireBurstBlock(float xSpacing, int segments, float xOffset)
 {
-	origin = (origin == Vector2f(0.f, 0.f) ? m_pos.xy() : origin);
+	Play3d::Vector3f origin = m_pos;
+	origin.x -= (xSpacing * ((f32)(segments - 1) / 2));
+	origin.x += xOffset;
 	GameObjectManager* pObjs{ GetObjectManager() };
-	float distrib = (maxX - minX) / (segments - 1);
 	for (int i = 0; i < segments; i++)
 	{
-		float xOffset = minX + (distrib * i);
-		GameObject* pObj = pObjs->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x + xOffset, origin.y, 0.f));
-		pObj->SetVelocity(Vector3f(0.f, (velocity == 0.f ? CANNON_SHOTSPEED : velocity), 0.f));
+		GameObject* pObj = pObjs->CreateObject(TYPE_BOSS_PELLET, origin);
+		pObj->SetVelocity(Vector3f(0.f,CANNON_SHOTSPEED, 0.f));
+		origin.x += xSpacing;
 	}
 }
 

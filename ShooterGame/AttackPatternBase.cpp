@@ -12,6 +12,8 @@ void AttackPatternBase::Update(ObjectBoss* pBoss)
 		if (m_attackIndex >= m_vAttacks.size())
 		{
 			m_attackIndex = 0;
+			m_loopCounter++;
+			OnLoop(pBoss);
 		}
 
 		// Process any simultaneous attacks this frame
@@ -22,6 +24,8 @@ void AttackPatternBase::Update(ObjectBoss* pBoss)
 			if (m_attackIndex >= m_vAttacks.size())
 			{
 				m_attackIndex = 0;
+				m_loopCounter++;
+				OnLoop(pBoss);
 			}
 		}
 	}

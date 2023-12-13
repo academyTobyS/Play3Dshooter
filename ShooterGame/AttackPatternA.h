@@ -1,7 +1,7 @@
 #pragma once
 #include "AttackPatternBase.h"
 
-// Pattern A: Medium Difficulty - Alternating Radial Bursts
+// Pattern A: Alternating Radial Bursts
 class AttackPatternA : public AttackPatternBase
 {
 public:

@@ -20,11 +20,11 @@ public:
 	void OnCollision(GameObject* other) override;
 
 	// Weapon One-Shots
-	void FireAtPlayer(Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f), float velocity = 0.f);
-	void FireAtPlayerMulti(int shotTotal, float delayPerShot);
+	void FireAtPlayer(float angleOffset = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f), float velocity = 0.f);
+	void FireAtPlayerMulti(int shotTotal, float delayPerShot, float angleOffset = 0.f);
 	void FireSingle(int spacingIncrement, float angle, float velocity = 0.f);
 	void FireBurstRadial(float minAngle, float maxAngle, int segments, float velocity = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f));
-	void FireBurstBlock(float minX, float maxX, int segments, float velocity = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f));
+	void FireBurstBlock(float xSpacing, int segments, float xOffset = 0.f);
 	void FireBomb(float detonationTimer, int fragments = 12, float angle = 0.f, float velocity = -0.f);
 
 	// Weapon Toggles
@@ -38,22 +38,28 @@ public:
 	void AudioDamage();
 
 private:
+	void UpdateAttackPattern();
 	void UpdateAutocannon();
 	void UpdateMultishot();
 
 	// Boss Data
 	AttackPatternBase* m_phases[PHASE_TOTAL];
-	eAttackPhase m_phase{PHASE_A};
+	int m_phase{PHASE_A};
 	int m_health{ BOSS_MAX_HEALTH };
 
 	// Audio Data
 	Play3d::Audio::SoundId m_sfxFirePellet[SFX_PELLET_SLOTS]; 
 	Play3d::Audio::SoundId m_sfxFireBomb[SFX_BOMB_SLOTS];
 
-	// Aimed MultiShot
-	int m_multishotRemaining{0};
-	float m_multishotDelay{0.2f};
-	float m_multishotTimer{0.f};
+	// Targeted MultiShots
+	struct MultishotRequest
+	{
+		int pendingShots{ 0 };
+		float delayPerShot{ 0.5f };
+		float angleOffset{ 0.f };
+		float timer{0.f};
+	};
+	std::vector<MultishotRequest> m_vMultishotRequests;
 
 	// Autocannon
 	float m_autocannonInterval{.5f};

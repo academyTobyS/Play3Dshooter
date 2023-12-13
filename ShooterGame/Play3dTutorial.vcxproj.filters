@@ -79,6 +79,18 @@
     <ClInclude Include="ObjectBossBomb.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="AttackPatternC.h">
+      <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackPatternD.h">
+      <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackPatternE.h">
+      <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackPatternF.h">
+      <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -140,6 +152,18 @@
     </ClCompile>
     <ClCompile Include="ObjectBossBomb.cpp">
       <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPatternC.cpp">
+      <Filter>BossAttackPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPatternD.cpp">
+      <Filter>BossAttackPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPatternE.cpp">
+      <Filter>BossAttackPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPatternF.cpp">
+      <Filter>BossAttackPatterns</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

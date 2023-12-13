@@ -21,10 +21,11 @@ AttackPatternA::AttackPatternA()
 
 void AttackPatternA::Start(ObjectBoss* pBoss)
 {
-	//pBoss->ToggleAutocannon(true);
+	AttackPatternBase::Start(pBoss);
+	pBoss->ToggleAutocannon(true, 0.f, 1, 1.5f);
 }
 
 void AttackPatternA::End(ObjectBoss* pBoss)
 {
-	//pBoss->ToggleAutocannon(false);
+	pBoss->ToggleAutocannon(false);
 }

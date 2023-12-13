@@ -6,7 +6,7 @@ ObjectBossPellet::ObjectBossPellet(Play3d::Vector3f position) : GameObject(TYPE_
 {
 	m_meshId = GetObjectManager()->GetMesh("..\\Assets\\Models\\pelletEnemy.obj");
 	m_materialId = GetObjectManager()->GetMaterialHLSL("..\\Assets\\Shaders\\BossPellet.hlsl");
-
+	m_scale = 1.2f;
 	m_colliders[0].radius = 0.15f;
 }
 
