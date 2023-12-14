@@ -17,6 +17,9 @@
     <Filter Include="BossAttackPatterns">
       <UniqueIdentifier>{8f79e726-bbb7-48d9-b8b2-413888da3faf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainMenu">
+      <UniqueIdentifier>{bd1d0a93-9afe-4c7b-be77-4ec72491285a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Flowstate.h">
@@ -64,7 +67,7 @@
     <ClInclude Include="GameHud.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectPlayerChunk.h">
+    <ClInclude Include="ObjectShipChunk.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="AttackPatternBase.h">
@@ -90,6 +93,12 @@
     </ClInclude>
     <ClInclude Include="AttackPatternF.h">
       <Filter>BossAttackPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuShip.h">
+      <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuButton.h">
+      <Filter>MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +147,7 @@
     <ClCompile Include="GameHud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectPlayerChunk.cpp">
+    <ClCompile Include="ObjectShipChunk.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="AttackPatternA.cpp">
@@ -164,6 +173,12 @@
     </ClCompile>
     <ClCompile Include="AttackPatternF.cpp">
       <Filter>BossAttackPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuShip.cpp">
+      <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuButton.cpp">
+      <Filter>MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

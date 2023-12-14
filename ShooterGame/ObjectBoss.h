@@ -6,6 +6,7 @@ static constexpr int BOSS_MAX_HEALTH{1000};
 
 static constexpr int SFX_PELLET_SLOTS{3};	// 3 unique audio for firing pellet
 static constexpr int SFX_BOMB_SLOTS{1};		// 2 unique audio for firing bomb
+static constexpr int SFX_DAMAGE_SLOTS{3};	// 3 unique audio for taking damage
 
 class ObjectBoss : public GameObject
 {
@@ -18,21 +19,19 @@ public:
 	void Update() override;
 	void Draw() const override;
 	void OnCollision(GameObject* other) override;
+	void Die();
+	bool IsAlive() {return m_health > 0;};
 
-	// Weapon One-Shots
+	// Weapon Functionality
+	void FirePellet(Play3d::Vector2f origin, float angle = 0.f, float velocity = 0.f);
 	void FireAtPlayer(float angleOffset = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f), float velocity = 0.f);
 	void FireAtPlayerMulti(int shotTotal, float delayPerShot, float angleOffset = 0.f);
-	void FireSingle(int spacingIncrement, float angle, float velocity = 0.f);
 	void FireBurstRadial(float minAngle, float maxAngle, int segments, float velocity = 0.f, Play3d::Vector2f origin = Play3d::Vector2f(0.f, 0.f));
 	void FireBurstBlock(float xSpacing, int segments, float xOffset = 0.f);
 	void FireBomb(float detonationTimer, int fragments = 12, float angle = 0.f, float velocity = -0.f);
-
-	// Weapon Toggles
 	void ToggleAutocannon(bool enabled, float interval = 0.2f, int groupSize = 8, float groupDelay = 1.5f);
-	void ActivateLaser(int laserId);
-	void DisableLaser(int laserId);
 
-	// Randomised Audio
+	// Audio Functions
 	void AudioPellet();
 	void AudioBomb();
 	void AudioDamage();
@@ -50,6 +49,8 @@ private:
 	// Audio Data
 	Play3d::Audio::SoundId m_sfxFirePellet[SFX_PELLET_SLOTS]; 
 	Play3d::Audio::SoundId m_sfxFireBomb[SFX_BOMB_SLOTS];
+	Play3d::Audio::SoundId m_sfxDamage[SFX_DAMAGE_SLOTS];
+	int m_sfxPelletsThisFrame{0};
 
 	// Targeted MultiShots
 	struct MultishotRequest

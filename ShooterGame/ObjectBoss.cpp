@@ -19,6 +19,8 @@ static constexpr float CANNON_SHOTSPEED{-0.05f};
 static constexpr int TOTAL_CANNONS{7};
 static constexpr float COOLDOWN_FIRE{3.5f};
 
+static constexpr int SFX_LIMIT_PELLETS{5}; // max of 5 simultaneous audio signals per frame
+
 AttackPatternA patternRadialBursts;
 AttackPatternB patternTripleBomb;
 AttackPatternC patternPachinko;
@@ -36,6 +38,9 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 	m_sfxFirePellet[1] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet2.wav");
 	m_sfxFirePellet[2] = pObj->GetAudioId("..\\Assets\\Audio\\BossPellet3.wav");
 	m_sfxFireBomb[0] = pObj->GetAudioId("..\\Assets\\Audio\\BossBomb1.wav");
+	m_sfxDamage[0] = pObj->GetAudioId("..\\Assets\\Audio\\Damage1.wav");
+	m_sfxDamage[1] = pObj->GetAudioId("..\\Assets\\Audio\\Damage2.wav");
+	m_sfxDamage[2] = pObj->GetAudioId("..\\Assets\\Audio\\Damage3.wav");
 	m_vMultishotRequests.reserve(4);
 
 	// Gateway
@@ -64,6 +69,12 @@ ObjectBoss::ObjectBoss(Play3d::Vector3f position) : GameObject(TYPE_BOSS, positi
 	RegisterAttackPattern(&patternBlockDivider, eAttackPhase::PHASE_F);
 	m_phase = eAttackPhase::PHASE_A;
 	m_phases[m_phase]->Start(this);
+
+	// Ensure boss chunks are preloaded to avoid lag on first death
+	pObj->GetMesh("..\\Assets\\Models\\_station-chunk-core.obj");
+	pObj->GetMesh("..\\Assets\\Models\\_station-chunk-left.obj");
+	pObj->GetMesh("..\\Assets\\Models\\_station-chunk-right.obj");
+	pObj->GetMesh("..\\Assets\\Models\\_station-chunk-lower.obj");
 }
 
 void ObjectBoss::ActivateAttackPattern(eAttackPhase newPhase)
@@ -91,23 +102,28 @@ void ObjectBoss::ToggleAutocannon(bool enabled, float interval, int groupSize, f
 
 void ObjectBoss::Update()
 {
-	// ship wobble anim
-	float elapsedTime = System::GetElapsedTime();
-	//m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
-	m_rotation.x = sin(elapsedTime * 2) * WOBBLE_STRENGTH / 2;
-	m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
-
-	UpdateAttackPattern();
-
-	// Process multishot requests (similar to autocannon except without endless loop)
-	UpdateMultishot();
-	
-	// Fire autocannon whenever active
-	if (m_autocannonActive)
+	if(IsAlive())
 	{
-		UpdateAutocannon();
-	}
+		// reset audio counter
+		m_sfxPelletsThisFrame = 0;
 
+		// ship wobble anim
+		float elapsedTime = System::GetElapsedTime();
+		//m_pos.x = sin(elapsedTime / 4) * POS_LIMIT_X;
+		m_rotation.x = sin(elapsedTime * 2) * WOBBLE_STRENGTH / 2;
+		m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
+
+		UpdateAttackPattern();
+
+		// Process multishot requests (similar to autocannon except without endless loop)
+		UpdateMultishot();
+	
+		// Fire autocannon whenever active
+		if (m_autocannonActive)
+		{
+			UpdateAutocannon();
+		}
+	}
 }
 
 void ObjectBoss::UpdateAttackPattern()
@@ -165,24 +181,31 @@ void ObjectBoss::UpdateMultishot()
 	}
 }
 
-void ObjectBoss::FireAtPlayer(float angleOffset, Play3d::Vector2f origin, float velocity)
+void ObjectBoss::FirePellet(Play3d::Vector2f origin, float angle, float velocity)
 {
-	if (origin == Vector2f(0.f, 0.f))
+	// if no specific origin requested, make origin == ship cannon
+	if (origin == Vector2f(0.f, 0.f)) 
 	{
 		origin = m_pos.xy();
 		origin.y -= 2.5f;
 	}
-	velocity = (velocity == 0.f ? CANNON_SHOTSPEED : velocity);
 
+	// if no specific velocity requested, make velocity == default
+	if (velocity == 0.f)
+	{
+		velocity = CANNON_SHOTSPEED;
+	}
 
 	GameObject* pObj = GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x, origin.y, 0.f));
-
-	Vector2f vecToPlayer = normalize(pObj->GetPosition().xy() - GetObjectManager()->GetPlayer()->GetPosition().xy());
-	float angle = atan2(vecToPlayer.x, vecToPlayer.y) + angleOffset;
-
 	pObj->SetVelocity(Vector3f(sin(angle), cos(angle), 0.f) * velocity);
-
 	AudioPellet();
+}
+
+void ObjectBoss::FireAtPlayer(float angleOffset, Play3d::Vector2f origin, float velocity)
+{
+	Vector2f vecToPlayer = normalize(origin - GetObjectManager()->GetPlayer()->GetPosition().xy());
+	float angle = atan2(vecToPlayer.x, vecToPlayer.y) + angleOffset;
+	FirePellet(origin, angle, velocity);
 }
 
 void ObjectBoss::FireAtPlayerMulti(int shotTotal, float delayPerShot, float angleOffset)
@@ -195,41 +218,25 @@ void ObjectBoss::FireAtPlayerMulti(int shotTotal, float delayPerShot, float angl
 	r.angleOffset = angleOffset;
 }
 
-void ObjectBoss::FireSingle(int spacingIncrement, float angle, float velocity)
-{
-	Vector3f spawnPos{ m_pos };
-	spawnPos.y -= 0.8f;
-	spawnPos.x += 0.38f;
-	spawnPos.x += CANNON_SPACING * spacingIncrement;
-
-	// Default to CANNON_SHOTSPEED but allow custom speeds
-	float shotSpeed = (velocity == 0.f ? CANNON_SHOTSPEED : velocity);
-	GetObjectManager()->CreateObject(TYPE_BOSS_PELLET, spawnPos)->SetVelocity(Vector3f(0.f, shotSpeed, 0.f));
-}
-
 void ObjectBoss::FireBurstRadial(float minAngle, float maxAngle, int segments, float velocity, Play3d::Vector2f origin)
 {
-	origin = (origin == Vector2f(0.f, 0.f) ? m_pos.xy() : origin);
 	GameObjectManager* pObjs{GetObjectManager()};
 	float angleIncrement = (maxAngle - minAngle) / (segments - 1);
 	for (int i = 0; i < segments; i++)
 	{
-		GameObject* pObj = pObjs->CreateObject(TYPE_BOSS_PELLET, Vector3f(origin.x, origin.y, 0.f));
-		float theta = minAngle + (angleIncrement * i);
-		pObj->SetVelocity(Vector3f(sin(theta), cos(theta), 0.f) * (velocity == 0.f ? CANNON_SHOTSPEED : velocity));
+		FirePellet(origin, minAngle + (angleIncrement * i), velocity);
 	}
 }
 
 void ObjectBoss::FireBurstBlock(float xSpacing, int segments, float xOffset)
 {
-	Play3d::Vector3f origin = m_pos;
+	Play3d::Vector2f origin = m_pos.xy();
 	origin.x -= (xSpacing * ((f32)(segments - 1) / 2));
 	origin.x += xOffset;
 	GameObjectManager* pObjs{ GetObjectManager() };
 	for (int i = 0; i < segments; i++)
 	{
-		GameObject* pObj = pObjs->CreateObject(TYPE_BOSS_PELLET, origin);
-		pObj->SetVelocity(Vector3f(0.f,CANNON_SHOTSPEED, 0.f));
+		FirePellet(origin);
 		origin.x += xSpacing;
 	}
 }
@@ -247,20 +254,14 @@ void ObjectBoss::FireBomb(float detonationTimer, int fragments, float angle, flo
 	AudioBomb();
 }
 
-void ObjectBoss::ActivateLaser(int laserId)
-{
-
-}
-
-void ObjectBoss::DisableLaser(int laserId)
-{
-
-}
-
 void ObjectBoss::AudioPellet()
 {
-	int sfxId = std::floor(RandValueInRange(0.f, SFX_PELLET_SLOTS));
-	Audio::PlaySound(m_sfxFirePellet[sfxId]);
+	if(m_sfxPelletsThisFrame < SFX_LIMIT_PELLETS)
+	{
+		int sfxId = std::floor(RandValueInRange(0.f, SFX_PELLET_SLOTS));
+		Audio::PlaySound(m_sfxFirePellet[sfxId]);
+		m_sfxPelletsThisFrame++;
+	}
 }
 
 void ObjectBoss::AudioBomb()
@@ -269,13 +270,53 @@ void ObjectBoss::AudioBomb()
 	Audio::PlaySound(m_sfxFireBomb[sfxId]);
 }
 
+void ObjectBoss::AudioDamage()
+{
+	int sfxId = std::floor(RandValueInRange(0.f, SFX_DAMAGE_SLOTS));
+	Audio::PlaySound(m_sfxDamage[sfxId], 0.25f);
+}
+
 void ObjectBoss::OnCollision(GameObject* other)
 {
 	if (other->GetObjectType() == GameObjectType::TYPE_PLAYER_PELLET)
 	{
-		m_health--;
-		GameHud::Get()->SetBossBarPercent((f32)m_health / BOSS_MAX_HEALTH);
+		AudioDamage();
+		GameHud::Get()->SetBossBarPercent((f32)(m_health - 1) / BOSS_MAX_HEALTH);
+
+		if (m_health > 0)
+		{
+			m_health--;
+			if(m_health == 0)
+			{
+				Die();
+			}
+		}
 	}
+}
+
+void ObjectBoss::Die()
+{
+	GameObjectManager* pObjs{ GetObjectManager() };
+	GameObject* pChunk;
+
+	pChunk = pObjs->CreateObject(TYPE_BOSS_CHUNK_CORE, m_pos);
+	pChunk->SetVelocity(Vector3f(0.f, 0.01f, 0.f));
+	pChunk->SetRotationSpeed(m_rotation / 8.f);
+
+	pChunk = pObjs->CreateObject(TYPE_BOSS_CHUNK_LEFT, m_pos);
+	pChunk->SetVelocity(Vector3f(0.03f, 0.f, 0.f));
+	pChunk->SetRotationSpeed(Vector3f(-0.03f, 0.f, 0.f));
+
+	pChunk = pObjs->CreateObject(TYPE_BOSS_CHUNK_RIGHT, m_pos);
+	pChunk->SetVelocity(Vector3f(-0.03f, 0.f, 0.f));
+	pChunk->SetRotationSpeed(Vector3f(0.03f, 0.f, 0.f));
+
+	pChunk = pObjs->CreateObject(TYPE_BOSS_CHUNK_LOWER, m_pos);
+	pChunk->SetVelocity(Vector3f(0.f, -0.02f, 0.f));
+	pChunk->SetRotationSpeed(-m_rotation / 8.f);
+
+	SetHidden(true);
+	Destroy();
 }
 
 void ObjectBoss::Draw() const

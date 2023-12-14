@@ -104,8 +104,8 @@ int PlayMain()
 
 	FlowstateGame stateGame;
 	states.RegisterState(&stateGame, eFlowstates::STATE_PLAY);
-	states.SetInitialState(eFlowstates::STATE_PLAY);
 
+	states.SetInitialState(eFlowstates::STATE_MENU);
 	//////////////////////////////////////
 	// main game loop
 	//////////////////////////////////////

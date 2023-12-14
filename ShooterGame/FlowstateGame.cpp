@@ -39,24 +39,10 @@ void FlowstateGame::EnterState()
 	m_starEmitter.ApplySettings(s);
 	m_starEmitter.m_position.y = 10.f;
 	m_starEmitter.Prewarm();
-
-	SetGameCamera();
 }
 
 void FlowstateGame::SetGameCamera()
-{
-	Graphics::SurfaceSize surfaceSize = Graphics::GetDisplaySurfaceSize();
-
-	// Perspective View
-	/*
-	//f32 fovY(kfPi / 4.f), aspect((f32)surfaceSize.m_width / (f32)surfaceSize.m_height), nearZ(0.1f), farZ(15.f);
-	Vector3f camEye{0.f, 2.5f, -10.f};
-	Vector3f forward{0.f, 0.f, 1.f};
-	Vector3f up{0.f, 1.f, 0.f};
-	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
-	Matrix4x4f project = MatrixPerspectiveProjectRH(fovY, aspect, nearZ, farZ);
-	*/
-	
+{	
 	// Ortho View
 	Vector3f camEye{ 0.f, 0.f, -10.f};
 	Vector3f forward{ 0.f, 0.f, 1.f };
@@ -64,7 +50,7 @@ void FlowstateGame::SetGameCamera()
 	Matrix4x4f view = MatrixLookatRH(camEye, camEye + forward, up);
 	Matrix4x4f projectOrtho = MatrixOrthoProjectRH(-GetGameHalfWidth(), GetGameHalfWidth(), -GetGameHalfHeight(), GetGameHalfHeight(), 0.f, 100.f);
 
-	Graphics::SetViewport(Graphics::Viewport(surfaceSize));
+	Graphics::SetViewport(Graphics::Viewport(Graphics::GetDisplaySurfaceSize()));
 	Graphics::SetViewMatrix(view);
 	Graphics::SetProjectionMatrix(projectOrtho);
 }
@@ -80,15 +66,6 @@ eFlowstates FlowstateGame::Update()
 		m_debugCollision = !m_debugCollision;
 	}
 
-	if(m_debugCam)
-	{
-		Demo::UpdateDebugCamera();
-		Demo::SetDebugCameraMatrices();
-	}
-	else
-	{
-		SetGameCamera();
-	}
 
 	GameObjectManager* pObjs{ GetObjectManager() };
 	pObjs->UpdateAll();
@@ -100,16 +77,23 @@ eFlowstates FlowstateGame::Update()
 
 void FlowstateGame::Draw()
 {
-	if (m_debugCam)
+	// Set Camera Mode
+	if(m_debugCam)
 	{
+		Demo::UpdateDebugCamera();
+		Demo::SetDebugCameraMatrices();
 		Demo::DrawDebugGrid();
 		UI::FontId fontId = UI::GetDebugFont();
 		static u32 frameCounter = 0;
 		UI::DrawString(fontId, Vector2f(20, 20), Colour::White, "Play3d, Single Header DX11");
 		UI::DrawPrintf(fontId, Vector2f(20, 50), Colour::Lightblue, "[frame %d, delta=%.2fms elapsed=%.2fs]", frameCounter++, System::GetDeltaTime() * 1000.f, System::GetElapsedTime());
 	}
+	else
+	{
+		SetGameCamera();
+	}
 
-
+	// Draw Game
 	Graphics::BeginPrimitiveBatch();
 	if (m_debugCollision)
 	{
@@ -119,7 +103,6 @@ void FlowstateGame::Draw()
 	m_starEmitter.Draw();
 	GameHud::Get()->Draw();
 	Graphics::EndPrimitiveBatch();
-
 }
 
 void FlowstateGame::ExitState()

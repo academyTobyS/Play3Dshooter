@@ -161,13 +161,15 @@
     <ClInclude Include="FlowstateMenu.h" />
     <ClInclude Include="GameHud.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MenuButton.h" />
+    <ClInclude Include="MenuShip.h" />
     <ClInclude Include="ObjectAsteroid.h" />
     <ClInclude Include="ObjectBoss.h" />
     <ClInclude Include="ObjectBossBomb.h" />
     <ClInclude Include="ObjectBossPellet.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectPellet.h" />
-    <ClInclude Include="ObjectPlayerChunk.h" />
+    <ClInclude Include="ObjectShipChunk.h" />
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Play3d.h" />
     <ClInclude Include="ObjectPlayer.h" />
@@ -187,6 +189,8 @@
     <ClCompile Include="GameHud.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="MenuButton.cpp" />
+    <ClCompile Include="MenuShip.cpp" />
     <ClCompile Include="ObjectAsteroid.cpp" />
     <ClCompile Include="ObjectBoss.cpp" />
     <ClCompile Include="ObjectBossBomb.cpp" />
@@ -195,7 +199,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectPellet.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
-    <ClCompile Include="ObjectPlayerChunk.cpp" />
+    <ClCompile Include="ObjectShipChunk.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="UtilityFunctions.cpp" />
   </ItemGroup>

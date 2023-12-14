@@ -3,12 +3,12 @@
 
 // Needs to know about all the object types so it can create them
 #include "ObjectPlayer.h"
-#include "ObjectPlayerChunk.h"
 #include "ObjectPellet.h"
 #include "ObjectBoss.h"
 #include "ObjectBossPellet.h"
 #include "ObjectBossBomb.h"
 #include "ObjectAsteroid.h"
+#include "ObjectShipChunk.h"
 
 // A global pointer to a GameObjectManager instance (not delared/visible outside of this compilation unit)
 GameObjectManager* g_pObjMan = nullptr;
@@ -59,12 +59,6 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 		pNewObj = new ObjectPellet(pos);
 		break;
 
-	case TYPE_PLAYER_CHUNK_CORE:
-	case TYPE_PLAYER_CHUNK_WING_L:
-	case TYPE_PLAYER_CHUNK_WING_R:
-		pNewObj = new ObjectPlayerChunk(objType, pos);
-		break;	
-
 	case TYPE_BOSS:
 		pNewObj = new ObjectBoss(pos);
 		break;
@@ -80,6 +74,16 @@ GameObject* GameObjectManager::CreateObject(GameObjectType objType, Play3d::Vect
 	case TYPE_ASTEROID:
 		pNewObj = new ObjectAsteroid(pos);
 		break;
+
+	case TYPE_PLAYER_CHUNK_CORE:
+	case TYPE_PLAYER_CHUNK_WING_L:
+	case TYPE_PLAYER_CHUNK_WING_R:
+	case TYPE_BOSS_CHUNK_CORE:
+	case TYPE_BOSS_CHUNK_LEFT:
+	case TYPE_BOSS_CHUNK_RIGHT:
+	case TYPE_BOSS_CHUNK_LOWER:
+		pNewObj = new ObjectShipChunk(objType, pos);
+		break;	
 	}
 
 	if( pNewObj != nullptr )

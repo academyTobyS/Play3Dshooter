@@ -4,29 +4,27 @@
 using namespace Play3d;
 
 static constexpr float SHIP_HALFWIDTH{0.15f};
-
-static constexpr float COOLDOWN_DOUBLE_TAP{0.2f};
-static constexpr float BARREL_ROLL_TIME{0.25f};
-
-static constexpr float DELAY_AUTOFIRE{0.05f};
-static constexpr float DELAY_ROLL{1.f};
+static constexpr float COOLDOWN_RESPAWN{2.f};
+static constexpr float PLAYER_INVINCIBILITY_TIME{1.5f};
 
 static constexpr float MAX_SPEED{.1f};
 static constexpr float STEER_SPEED_X{.6f};
 static constexpr float STEER_SPEED_Y{.5f};
+
+static constexpr float COOLDOWN_DOUBLE_TAP{0.2f};
+static constexpr float BARREL_ROLL_TIME{0.25f};
 static constexpr float BARREL_ROLL_SPEED{MAX_SPEED * 3};
+
+static constexpr float DELAY_AUTOFIRE{0.05f};
+static constexpr float DELAY_ROLL{1.f};
 
 static constexpr float SPIN_SPEED{1.f};
 static constexpr float MAX_ROT_SPEED{.1f};
 static constexpr float MAX_ROT_X{kfQuartPi / 2.f};
 static constexpr float MAX_ROT_Y{kfQuartPi / 4.f};
 
-static constexpr float COOLDOWN_RESPAWN{2.f};
-
-static constexpr float PLAYER_INVINCIBILITY_TIME{1.5f};
-
 static const Vector2f MIN_POS{-9.f, -7.f};
-static const Vector2f MAX_POS{9.f, 7.f};
+static const Vector2f MAX_POS{9.f, 5.f};
 
 ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position)
 {
@@ -34,7 +32,7 @@ ObjectPlayer::ObjectPlayer(Vector3f position) : GameObject(TYPE_PLAYER, position
 
 	// Load and assign player mesh
 	m_meshId = pObjs->GetMesh("..\\Assets\\Models\\_fighter.obj");
-	m_materialId = GetObjectManager()->GetMaterial("..\\Assets\\Models\\_fighter-blue.jpg");
+	m_materialId = pObjs->GetMaterial("..\\Assets\\Models\\_fighter-blue.jpg");
 
 	// Ensure player chunks are preloaded to avoid lag on first death
 	pObjs->GetMesh("..\\Assets\\Models\\_fighter-chunk-core.obj");
