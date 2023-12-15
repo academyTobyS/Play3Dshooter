@@ -105,9 +105,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FlowstateMenu.cpp">
       <Filter>Flowstates</Filter>
     </ClCompile>
