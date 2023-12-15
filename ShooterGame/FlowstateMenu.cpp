@@ -1,4 +1,5 @@
 #include "FlowstateMenu.h"
+#include "ObjectManager.h"
 using namespace Play3d;
 
 void FlowstateMenu::EnterState()
@@ -79,6 +80,7 @@ eFlowstates FlowstateMenu::Update()
 
 	if (m_buttonPlay.IsClicked())
 	{
+		Audio::PlaySound(GetObjectManager()->GetAudioId("..\\Assets\\Audio\\GameStart.wav"), 1.5f);
 		return eFlowstates::STATE_PLAY;
 	}
 
