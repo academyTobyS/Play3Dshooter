@@ -317,6 +317,8 @@ void ObjectBoss::Die()
 
 	SetHidden(true);
 	Destroy();
+
+	Audio::PlaySound(GetObjectManager()->GetAudioId("..\\Assets\\Audio\\GameWin.wav"), 3.5f);
 }
 
 void ObjectBoss::Draw() const

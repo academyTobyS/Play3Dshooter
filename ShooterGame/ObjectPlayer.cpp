@@ -86,7 +86,6 @@ void ObjectPlayer::Respawn()
 	if(m_lives > 0)
 	{
 		m_lives--;
-
 		m_pos = Vector3f(0.f, -GetGameHalfHeight() / 1.25f, 0.f);
 		m_velocity = Vector3f(0.f, 0.f, 0.f);
 		m_rotation = Vector3f(0.f, 0.f, 0.f);
@@ -107,6 +106,11 @@ void ObjectPlayer::Respawn()
 		m_invincibilityTimer = PLAYER_INVINCIBILITY_TIME;
 
 		GameHud::Get()->SetLives(m_lives);
+	}
+	else if(m_lives == 0)
+	{
+		Audio::PlaySound(GetObjectManager()->GetAudioId("..\\Assets\\Audio\\GameOver.wav"), 3.5f);
+		m_lives = -1;
 	}
 }
 
