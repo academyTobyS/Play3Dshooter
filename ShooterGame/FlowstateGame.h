@@ -15,6 +15,7 @@ private:
 	void SetGameCamera();
 
 	ParticleEmitter m_starEmitter;
+	float m_endgameTimer{0.f};
 	bool m_debugCam{false};
 	bool m_debugCollision{false};
 };

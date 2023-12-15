@@ -25,7 +25,9 @@ public:
 	void CleanUpAll(); 
 
 	GameObject* GetPlayer() { return m_pPlayer; }
+	GameObject* GetBoss() {return m_pBoss; }
 	void SetPlayer( GameObject* pPlayer ) { m_pPlayer = pPlayer; }
+	void SetBoss(GameObject* pBoss) {m_pBoss = pBoss; }
 	int GetAllObjectsOfType( GameObjectType objType, std::vector<GameObject*>& objList, bool clearList = true );
 	void DeleteGameObjectsByType( GameObjectType type );
 
@@ -35,6 +37,7 @@ private:
 	std::unordered_map<const char*, Play3d::Audio::SoundId> m_audioRegister;
 	std::unordered_map<const char*, Play3d::Graphics::MaterialId> m_materialRegister;
 	GameObject* m_pPlayer{ nullptr };
+	GameObject* m_pBoss{ nullptr };
 };
 
 GameObjectManager* GetObjectManager();

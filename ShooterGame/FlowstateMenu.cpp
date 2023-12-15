@@ -80,7 +80,7 @@ eFlowstates FlowstateMenu::Update()
 
 	if (m_buttonPlay.IsClicked())
 	{
-		Audio::PlaySound(GetObjectManager()->GetAudioId("..\\Assets\\Audio\\GameStart.wav"), 1.5f);
+		Audio::PlaySound(GetObjectManager()->GetAudioId("..\\Assets\\Audio\\GameStart.wav"), 1.f);
 		return eFlowstates::STATE_PLAY;
 	}
 

@@ -3,6 +3,10 @@
 #include "ObjectManager.h"
 #include "UtilityFunctions.h"
 #include "GameHud.h"
+
+#include "ObjectBoss.h"
+#include "ObjectPlayer.h"
+
 using namespace Play3d;
 
 void FlowstateGame::EnterState()
@@ -22,7 +26,8 @@ void FlowstateGame::EnterState()
 	GameObject* pPlayer = pObjs->CreateObject(GameObjectType::TYPE_PLAYER, Vector3f(0.f, -GetGameHalfHeight() / 1.25f, 0.f));
 	pObjs->SetPlayer(pPlayer);
 
-	pObjs->CreateObject(GameObjectType::TYPE_BOSS, Vector3f(0.f, GetGameHalfHeight() / 1.25f, 0.f));
+	GameObject* pBoss = pObjs->CreateObject(GameObjectType::TYPE_BOSS, Vector3f(0.f, GetGameHalfHeight() / 1.25f, 0.f));
+	pObjs->SetBoss(pBoss);
 
 	// Setup stars
 	ParticleEmitterSettings s;
@@ -39,6 +44,9 @@ void FlowstateGame::EnterState()
 	m_starEmitter.ApplySettings(s);
 	m_starEmitter.m_position.y = 10.f;
 	m_starEmitter.Prewarm();
+
+	// Set timer for quitting after gameover/victory
+	m_endgameTimer = 5.f;
 }
 
 void FlowstateGame::SetGameCamera()
@@ -66,10 +74,19 @@ eFlowstates FlowstateGame::Update()
 		m_debugCollision = !m_debugCollision;
 	}
 
-
 	GameObjectManager* pObjs{ GetObjectManager() };
 	pObjs->UpdateAll();
 	m_starEmitter.Tick();
+
+	if (static_cast<ObjectPlayer*>(pObjs->GetPlayer())->IsGameOver()
+		|| static_cast<ObjectBoss*>(pObjs->GetPlayer())->IsAlive() == false)
+	{
+		m_endgameTimer -= System::GetDeltaTime();
+		if (m_endgameTimer < 0.f)
+		{
+			return eFlowstates::STATE_MENU;
+		}
+	}
 
 	return eFlowstates::STATE_NULL;
 }

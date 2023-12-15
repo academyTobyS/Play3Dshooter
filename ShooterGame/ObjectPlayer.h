@@ -16,6 +16,8 @@ public:
 
 	void Draw() const override;
 
+	bool IsGameOver(){return m_lives < 0;}
+
 private:
 	Play3d::Audio::SoundId m_sfxDeath[SFX_DEATH_SLOTS];
 

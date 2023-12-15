@@ -1,6 +1,7 @@
 #include "ObjectBoss.h"
 #include "ObjectManager.h"
 #include "GameHud.h"
+#include "ObjectPlayer.h"
 
 #include "ObjectBossBomb.h"
 #include "AttackPatternA.h"
@@ -13,11 +14,11 @@
 using namespace Play3d;
 
 static constexpr float WOBBLE_STRENGTH{kfQuartPi / 4.f};
-static constexpr float POS_LIMIT_X{8.f};
+static constexpr float COOLDOWN_FIRE{3.5f};
+
 static constexpr float CANNON_SPACING{0.75f};
 static constexpr float CANNON_SHOTSPEED{-0.05f};
-static constexpr int TOTAL_CANNONS{7};
-static constexpr float COOLDOWN_FIRE{3.5f};
+static constexpr float CANNON_OFFSET_Y{-2.5f};
 
 static constexpr int SFX_LIMIT_PELLETS{5}; // max of 5 simultaneous audio signals per frame
 
@@ -113,15 +114,18 @@ void ObjectBoss::Update()
 		m_rotation.x = sin(elapsedTime * 2) * WOBBLE_STRENGTH / 2;
 		m_rotation.y = cos(elapsedTime) * WOBBLE_STRENGTH;
 
-		UpdateAttackPattern();
-
-		// Process multishot requests (similar to autocannon except without endless loop)
-		UpdateMultishot();
-	
-		// Fire autocannon whenever active
-		if (m_autocannonActive)
+		if(static_cast<ObjectPlayer*>(GetObjectManager()->GetPlayer())->IsGameOver() == false)
 		{
-			UpdateAutocannon();
+			UpdateAttackPattern();
+
+			// Process multishot requests (similar to autocannon except without endless loop)
+			UpdateMultishot();
+	
+			// Fire autocannon whenever active
+			if (m_autocannonActive)
+			{
+				UpdateAutocannon();
+			}
 		}
 	}
 }
@@ -187,7 +191,7 @@ void ObjectBoss::FirePellet(Play3d::Vector2f origin, float angle, float velocity
 	if (origin == Vector2f(0.f, 0.f)) 
 	{
 		origin = m_pos.xy();
-		origin.y -= 2.5f;
+		origin.y += CANNON_OFFSET_Y;
 	}
 
 	// if no specific velocity requested, make velocity == default
@@ -203,6 +207,13 @@ void ObjectBoss::FirePellet(Play3d::Vector2f origin, float angle, float velocity
 
 void ObjectBoss::FireAtPlayer(float angleOffset, Play3d::Vector2f origin, float velocity)
 {
+	
+	if (origin == Vector2f(0.f, 0.f))
+	{
+		origin = m_pos.xy();
+		origin.y += CANNON_OFFSET_Y;
+	}
+
 	Vector2f vecToPlayer = normalize(origin - GetObjectManager()->GetPlayer()->GetPosition().xy());
 	float angle = atan2(vecToPlayer.x, vecToPlayer.y) + angleOffset;
 	FirePellet(origin, angle, velocity);
